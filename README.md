@@ -3,7 +3,7 @@ My personal doom-emacs configuration, tuned for my needs. It is customized from 
 
 ### Clone this directory
 * git clone git@github.com:prairie-guy/doom-emacs_dot_file.git .doom.d
-* Use ssh to clone to allow easy git pull authentication through ssh-key
+* Remember to use ssh-address to clone this repository. That allow easy git pull authentication through ssh-key.
 
 ### Install on Ubuntu emacs26 or greater: (may need )
 * add-apt-repository ppa:kelleyk/emacs
