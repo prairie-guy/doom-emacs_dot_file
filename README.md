@@ -16,10 +16,12 @@ My personal doom-emacs configuration, tuned for my needs. It is customized from 
 * ln -s /usr/local/opt/emacs-plus/Emacs.app /Applications/Emacs.app
 
 ### Install ripgrep, a faster grep: (https://github.com/BurntSushi/ripgrep)
-* apt-get install git ripgrep
+* Linux: apt-get install git ripgrep
+* OSx: brew install ripgrep
 
 ### Install fd, a faster find: (https://github.com/sharkdp/fd)
-* apt-get install fd-find
+* Linux: apt-get install fd-find
+* OSx : brew install coreutils fd
 
 ### Edit ~/.bashrc
 * `export PATH="~/.emacs.d/bin:$PATH"`
