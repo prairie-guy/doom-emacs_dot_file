@@ -2,7 +2,7 @@
 My personal doom-emacs configuration, tuned for my needs. It is customized from the default doom-emacs. I didn't want to use evil, so I unplugged it. This is based on the configuration I had in: https://github.com/prairie-guy/emacs_dotfile 
 
 ### Clone this directory
-* git `clone git@github.com:prairie-guy/doom-emacs_dot_file.git .doom.d`
+* `git clone git@github.com:prairie-guy/doom-emacs_dot_file.git .doom.d`
 * Remember to use ssh-address to clone this repository. That allows `git push` authentication through ssh-key.
 
 ### Installing on Ubuntu emacs26 or greater:
