@@ -23,6 +23,7 @@ My personal doom-emacs configuration, tuned for my needs. It is customized from 
 * `export PATH="~/.emacs.d/bin:$PATH"`
 
 ### Clone ~/.doom.d (This repository)
+* Do this before installing doom-emacs.
 * `git clone git@github.com:prairie-guy/doom-emacs_dot_file.git .doom.d`
 * Remember to use ssh-address to clone this repository. That allows `git push` authentication through ssh-key.
 
