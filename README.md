@@ -34,9 +34,9 @@ My personal doom-emacs configuration, tuned for my needs. It is customized from 
 * doom doctor 
 
 ### Configuration is done in ~/.doom.d/
-* init.el     - General parameter selections. Choose options, but don't further configurations
-* package.el  - Add additional packages. Don't use melapa or add packages otherwise
-* config.el   - This file. This is where personal customization should take place
+* init.el - General parameter selections. Select options. No additions.
+* package.el  - Add additional packages here. Don't use melpa or add package management.
+* config.el - This is where personal customization should take place
 
 ### doom documentation:
 * https://github.com/hlissner/doom-emacs/blob/develop/docs/getting_started.org
