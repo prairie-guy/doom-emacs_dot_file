@@ -104,7 +104,7 @@
 ;;
 (setq! evil-want-Y-yank-to-eol nil)
 (setq evil-move-cursor-back nil)
-;(global-set-key "\C-h" 'delete-backward-char)               ; required to fix DEL key -- Need to reassign help
+;;;;(global-set-key "\C-h" 'delete-backward-char)               ; required to fix DEL key -- Need to reassign help
 
 ;; -----------------------------------------
 ;; -- Undo-tree--mode configuration --
@@ -118,7 +118,7 @@
 ;; 
 (smartparens-global-strict-mode)
 (show-smartparens-global-mode)
-
+(define-key smartparens-mode-map (kbd "C-c (") 'sp-wrap-round) ;; Wrap expression with ()
 
 ;; ---------------------------
 ;; -- company configuration --
@@ -146,3 +146,27 @@
 ;; julia and julia-repl package added
 (add-hook 'julia-mode-hook 'julia-repl-mode)
 (set-language-environment "UTF-8")
+
+
+;; -------------------------------------------
+;; -- Clojure Mode Configuration ---
+;; -------------------------------------------
+(setq cider-show-error-buffer nil)
+(setq cljr-suppress-no-project-warning t)
+(add-hook 'cider-mode-hook #'eldoc-mode) ; Enable eldoc in Clojure buffers
+(use-package cider
+ :ensure t
+ :config
+ (setq cider-show-error-buffer nil)
+ (define-key cider-mode-map (kbd "C-c C-b") 'cider-eval-buffer)
+ (defun run-clojure()
+   (interactive)
+   (+popup-mode 0)
+   (delete-other-windows)
+   (setq w1 (selected-window))
+   (setq w1name (buffer-name))
+   (setq w2 (split-window w1 nil t))
+   (cider-jack-in-clj nil)
+   (set-window-buffer w2 "*cider*")
+   (set-window-buffer w1 w1name))
+ )
