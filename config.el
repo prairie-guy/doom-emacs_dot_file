@@ -104,7 +104,8 @@
 ;;
 (setq! evil-want-Y-yank-to-eol nil)
 (setq evil-move-cursor-back nil)
-;;;;(global-set-key "\C-h" 'delete-backward-char)               ; required to fix DEL key -- Need to reassign help
+(setq split-width-threshold 80) ; Split screen side-by-side if min 80 width
+;;;;(global-set-key "\C-h" 'delete-backward-char) ; required to fix DEL key -- Need to reassign help
 
 ;; -----------------------------------------
 ;; -- Undo-tree--mode configuration --
@@ -143,9 +144,30 @@
 ;; -- Julia Mode Configuration ---
 ;; -------------------------------------------
 ;; julia not uncommented in .doom.d/init.el
-;; julia and julia-repl package added
-(add-hook 'julia-mode-hook 'julia-repl-mode)
+;; julia, julia-repl julia-snail package added
+;;
+;;(add-hook 'julia-mode-hook 'julia-repl-mode)  ; Don't use with julia-snail
 (set-language-environment "UTF-8")
+(add-to-list 'load-path "/path/to/julia-snail")
+(require 'julia-snail)
+(add-hook 'julia-mode-hook #'julia-snail-mode)
+
+(defun julia-snail-save-and-send-buffer-file ()
+  (interactive)
+  (save-buffer)
+  (julia-snail-send-buffer-file)
+  (julia-snail))
+; Save before sending over buffer
+(define-key julia-snail-mode-map  (kbd "C-c C-b") #'julia-snail-save-and-send-buffer-file)
+
+(defun julia-|> ()
+  "Insert '|> for use with Julia Tranducers"
+  (interactive) (insert "|>"))
+(define-key julia-snail-mode-map  (kbd "C-c .") 'julia-|> )
+
+(add-to-list 'display-buffer-alist
+             '("\\*julia" (display-buffer-reuse-window display-buffer-same-window)))
+
 
 
 ;; -------------------------------------------
@@ -155,10 +177,16 @@
 (setq cljr-suppress-no-project-warning t)
 (add-hook 'cider-mode-hook #'eldoc-mode) ; Enable eldoc in Clojure buffers
 (use-package cider
- :ensure t
+ ;:ensure t
  :config
  (setq cider-show-error-buffer nil)
- (define-key cider-mode-map (kbd "C-c C-b") 'cider-eval-buffer)
+
+ (defun cider-snail-save-and-eval-buffer ()
+  (interactive)
+  (save-buffer)
+  (cider-load-buffer-and-switch-to-repl-buffer))
+
+ (define-key cider-mode-map (kbd "C-c C-b") 'cider-snail-save-and-eval-buffer)
  (defun run-clojure()
    (interactive)
    (+popup-mode 0)
