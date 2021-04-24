@@ -108,6 +108,12 @@
 ;;;;(global-set-key "\C-h" 'delete-backward-char) ; required to fix DEL key -- Need to reassign help
 
 ;; -----------------------------------------
+;; -- Global iPad Mouse/Trackpad Scrolling --
+;; -----------------------------------------
+(global-set-key (kbd "<mouse-5>") 'scroll-up-line)
+(global-set-key (kbd "<mouse-4>") 'scroll-down-line)
+
+;; -----------------------------------------
 ;; -- Undo-tree--mode configuration --
 ;; -----------------------------------------
 ;; undo-tree package added
