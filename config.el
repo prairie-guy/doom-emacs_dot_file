@@ -126,7 +126,6 @@
 (smartparens-global-strict-mode)
 (show-smartparens-global-mode)
 (define-key smartparens-mode-map (kbd "C-c (") 'sp-wrap-round) ;; Wrap expression with ()
-
 ;; ---------------------------
 ;; -- company configuration --
 ;; ---------------------------
@@ -136,14 +135,36 @@
 (define-key company-active-map (kbd "\C-d") 'company-show-doc-buffer)
 (define-key company-active-map (kbd "<tab>") 'company-complete)
 
+;; -------------------------------------------
+;; -- Org Mode Configuration ---
+;; -------------------------------------------
+
+(setq
+ org-hide-emphasis-markers t
+ org-fontify-done-headline t
+ org-hide-leading-stars t
+ org-pretty-entities t)
+
+;; (use-package org-bullets
+;;   :hook (org-mode . org-bullets-mode))
+
 
 ;; ---------------------------
 ;; -- Python configuration --
 ;; ---------------------------
 ;; elpy package added
 (elpy-enable)
-(setq python-shell-interpreter "ipython"
-      python-shell-interpreter-args "-i --simple-prompt")
+
+(defun elpy-shell-send-region-or-buffer-switch ()
+  (interactive)
+  (elpy-shell-send-region-or-buffer)
+  (elpy-shell-switch-to-shell))
+(define-key elpy-mode-map  (kbd "C-c C-b") #'elpy-shell-send-region-or-buffer-switch)
+
+(defun disable-smartparens-strict-mode ()
+  (interactive)
+  (smartparens-strict-mode -1))
+(add-hook 'inferior-python-mode-hook #'disable-smartparens-strict-mode)
 
 
 ;; -------------------------------------------
@@ -204,3 +225,16 @@
    (set-window-buffer w2 "*cider*")
    (set-window-buffer w1 w1name))
  )
+
+;; -------------------------------------------
+;; -- Hy Mode Configuration ---
+;; -------------------------------------------
+;(setq hy-shell--interpreter-args '("--spy"))
+;(setq hy-shell--interpreter-args '("--repl-output-fn" "hy.contrib.pprint.pformat"))
+
+;; Disable jedhy-mode and company-mode in inferior-hy-mode
+;; Alternatively, use vterm and execute hy to regain tabe-complete
+(setq hy-shell--interpreter-args
+      '("--repl-output-fn" "hy.contrib.hy-repr.hy-repr")
+      hy-jedhy--enable? nil)
+(add-hook 'hy-mode-hook (lambda () (company-mode)))
