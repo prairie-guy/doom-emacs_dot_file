@@ -143,7 +143,9 @@
  org-hide-emphasis-markers t
  org-fontify-done-headline t
  org-hide-leading-stars t
- org-pretty-entities t)
+ org-pretty-entities t
+ org-ascii-text-width 90
+ )
 
 ;; (use-package org-bullets
 ;;   :hook (org-mode . org-bullets-mode))

@@ -57,4 +57,5 @@
 (package! julia-repl)
 (package! julia-snail)
 (package! org-bullets)
-(package! hy-mode)
+(package! ess)
+;;(package! hy-mode)
