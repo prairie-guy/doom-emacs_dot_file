@@ -144,7 +144,7 @@
  org-fontify-done-headline t
  org-hide-leading-stars t
  org-pretty-entities t
- org-ascii-text-width 90
+ org-ascii-text-width 95
  )
 
 ;; (use-package org-bullets
