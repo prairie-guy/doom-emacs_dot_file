@@ -236,7 +236,13 @@
 
 ;; Disable jedhy-mode and company-mode in inferior-hy-mode
 ;; Alternatively, use vterm and execute hy to regain tabe-complete
-(setq hy-shell--interpreter-args
-      '("--repl-output-fn" "hy.contrib.hy-repr.hy-repr")
-      hy-jedhy--enable? nil)
-(add-hook 'hy-mode-hook (lambda () (company-mode)))
+;; (setq hy-shell--interpreter-args
+;;       '("--repl-output-fn" "hy.contrib.hy-repr.hy-repr")
+;;       hy-jedhy--enable? nil)
+;; (add-hook 'hy-mode-hook (lambda () (company-mode)))
+
+
+;; -------------------------------------------
+;; -- osc52 Configuration - emacs copy/paste -
+;; -------------------------------------------
+;(osc52-set-cut-function)
