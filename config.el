@@ -241,8 +241,3 @@
 ;;       hy-jedhy--enable? nil)
 ;; (add-hook 'hy-mode-hook (lambda () (company-mode)))
 
-
-;; -------------------------------------------
-;; -- osc52 Configuration - emacs copy/paste -
-;; -------------------------------------------
-;(osc52-set-cut-function)
