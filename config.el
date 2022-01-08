@@ -122,10 +122,30 @@
 ;; ---------------------------
 ;; -- smartparens configuration --
 ;; ---------------------------
-;; 
 (smartparens-global-strict-mode)
 (show-smartparens-global-mode)
-(define-key smartparens-mode-map (kbd "C-c (") 'sp-wrap-round) ;; Wrap expression with ()
+(define-key smartparens-mode-map (kbd "C-<right>") 'sp-forward-slurp-sexp)
+(define-key smartparens-mode-map (kbd "C-<left>")  'sp-backward-slurp-sexp)
+(define-key smartparens-mode-map (kbd "M-<right>") 'sp-forward-barf-sexp)
+(define-key smartparens-mode-map (kbd "M-<left>")  'sp-backward-barf-sexp)
+(define-key smartparens-mode-map (kbd "C-M-]")     'sp-unwrap-sexp)
+(define-key smartparens-mode-map (kbd "C-M-[")     'sp-backward-unwrap-sexp)
+(define-key smartparens-mode-map (kbd "C-c (")     'sp-wrap-round)
+(define-key smartparens-mode-map (kbd "C-c {")     'sp-wrap-curly)
+(define-key smartparens-mode-map (kbd "C-c [")     'sp-wrap-square)
+(defun sp-wrap-quote ()
+  "Wrap following sexp in double-quote."
+  (interactive)
+  (sp-wrap-with-pair "\""))
+(define-key smartparens-mode-map (kbd "C-c \"") 'sp-wrap-quote);; Wrap expression with \"
+
+(defun sp-wrap-back-quote ()
+  "Wrap following sexp in back-quote."
+  (interactive)
+  (sp-wrap-with-pair "`"))
+(define-key smartparens-mode-map (kbd "C-c `") 'sp-wrap-back-quote);; Wrap expression with \`
+
+
 ;; ---------------------------
 ;; -- company configuration --
 ;; ---------------------------
@@ -134,6 +154,7 @@
 (define-key company-active-map (kbd "\C-p") 'company-select-previous)
 (define-key company-active-map (kbd "\C-d") 'company-show-doc-buffer)
 (define-key company-active-map (kbd "<tab>") 'company-complete)
+
 
 ;; -------------------------------------------
 ;; -- Org Mode Configuration ---
@@ -215,18 +236,20 @@
   (save-buffer)
   (cider-load-buffer-and-switch-to-repl-buffer))
 
- (define-key cider-mode-map (kbd "C-c C-b") 'cider-snail-save-and-eval-buffer)
+ (define-key cider-mode-map (kbd "C-c C-b") 'cider-load-buffer)
+ (define-key cider-mode-map (kbd "C-c C-a") 'cider-format-defun)
  (defun run-clojure()
    (interactive)
    (+popup-mode 0)
    (delete-other-windows)
    (setq w1 (selected-window))
    (setq w1name (buffer-name))
-   (setq w2 (split-window w1 nil t))
+   ;(setq w2 (split-window w1 nil t))
    (cider-jack-in-clj nil)
-   (set-window-buffer w2 "*cider*")
-   (set-window-buffer w1 w1name))
- )
+   ;(set-window-buffer w2 "*cider*")
+   (set-window-buffer w1 w1name)))
+
+
 
 ;; -------------------------------------------
 ;; -- Hy Mode Configuration ---
