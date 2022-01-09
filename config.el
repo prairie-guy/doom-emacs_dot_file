@@ -250,6 +250,13 @@
    (set-window-buffer w1 w1name)))
 
 
+;; -------------------------------------------
+;; -- Clojure-lsp mode Configuration ---
+;; -------------------------------------------
+;; Make an error go away
+(after! lsp-mode
+  (advice-remove #'lsp #'+lsp-dont-prompt-to-install-servers-maybe-a))
+
 
 ;; -------------------------------------------
 ;; -- Hy Mode Configuration ---

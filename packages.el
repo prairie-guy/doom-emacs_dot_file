@@ -58,4 +58,5 @@
 (package! julia-snail)
 (package! org-bullets)
 (package! ess)
+;(package! lsp-mode)
 ;;(package! hy-mode)
