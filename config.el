@@ -176,13 +176,17 @@
 ;; -- Python configuration --
 ;; ---------------------------
 ;; elpy package added
-(elpy-enable)
+;; (elpy-enable)
+;;
+(setq +python-ipython-repl-args '("-i" "--simple-prompt" "--no-color-info"))
+(setq +python-jupyter-repl-args '("--simple-prompt"))
 
-(defun elpy-shell-send-region-or-buffer-switch ()
+(defun python-send-region-or-buffer-switch ()
   (interactive)
-  (elpy-shell-send-region-or-buffer)
-  (elpy-shell-switch-to-shell))
-(define-key elpy-mode-map  (kbd "C-c C-b") #'elpy-shell-send-region-or-buffer-switch)
+  (python-shell-send-buffer)
+  (python-shell-switch-to-shell))
+(add-hook 'python-mode-hook (lambda ()
+ (define-key python-mode-map  (kbd "C-c C-b") 'python-send-region-or-buffer-switch)))
 
 (defun disable-smartparens-strict-mode ()
   (interactive)
@@ -231,12 +235,22 @@
  :config
  (setq cider-show-error-buffer nil)
 
- (defun cider-snail-save-and-eval-buffer ()
+(defun cider-save-and-eval-buffer ()
   (interactive)
   (save-buffer)
   (cider-load-buffer-and-switch-to-repl-buffer))
 
- (define-key cider-mode-map (kbd "C-c C-b") 'cider-load-buffer)
+;; (defun cider-save-and-eval-buffer ()
+;;   (interactive)
+;;   (save-buffer)
+;;   (cider-load-buffer)
+;;   (cider-repl-set-ns)
+;;   (cider-switch-to-repl-buffer))
+;;
+
+
+(define-key cider-mode-map (kbd "C-c C-b") 'cider-save-and-eval-buffer)
+ ;(define-key cider-mode-map (kbd "C-c C-b") 'cider-load-buffer)
  (define-key cider-mode-map (kbd "C-c C-a") 'cider-format-defun)
  (defun run-clojure()
    (interactive)
@@ -244,18 +258,17 @@
    (delete-other-windows)
    (setq w1 (selected-window))
    (setq w1name (buffer-name))
-   ;(setq w2 (split-window w1 nil t))
    (cider-jack-in-clj nil)
-   ;(set-window-buffer w2 "*cider*")
-   (set-window-buffer w1 w1name)))
+   (set-window-buffer w1 w1name)
+   (run-with-timer 5.0 nil 'cider-repl-set-ns (cider-current-ns))))
+
 
 ;; -------------------------------------------
 ;; -- Clojure-lsp mode Configuration ---
 ;; -------------------------------------------
-;; Make an error go away
-;; (after! lsp-mode
-;;   (advice-remove #'lsp #'+lsp-dont-prompt-to-install-servers-maybe-a))
-
+;; lsp-diagnostics can be a pain to have all of the time
+;;(setq lsp-diagnostics-provider :none)
+(setq lsp-ui-sideline-show-diagnostics nil)
 
 ;; -------------------------------------------
 ;; -- Hy Mode Configuration ---
