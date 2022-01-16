@@ -229,6 +229,7 @@
 ;; -------------------------------------------
 (setq cider-show-error-buffer nil)
 (setq cljr-suppress-no-project-warning t)
+(setq cljr-add-ns-to-blank-clj-files nil) ; No need for a default ns in a new file
 (add-hook 'cider-mode-hook #'eldoc-mode) ; Enable eldoc in Clojure buffers
 (use-package cider
  ;:ensure t
@@ -257,9 +258,11 @@
 ;; -------------------------------------------
 ;; -- Clojure-lsp mode Configuration ---
 ;; -------------------------------------------
-;; lsp-diagnostics can be a pain to have all of the time
-;;(setq lsp-diagnostics-provider :none)
-(setq lsp-ui-sideline-show-diagnostics nil)
+                                        ;
+(setq lsp-ui-sideline-show-diagnostics nil) ; lsp-diagnostics can be a pain to have all of the time
+
+
+
 
 ;; -------------------------------------------
 ;; -- Hy Mode Configuration ---
