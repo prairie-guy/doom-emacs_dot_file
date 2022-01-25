@@ -153,8 +153,7 @@
 (define-key company-active-map (kbd "\C-n") 'company-select-next)
 (define-key company-active-map (kbd "\C-p") 'company-select-previous)
 (define-key company-active-map (kbd "\C-d") 'company-show-doc-buffer)
-(define-key company-active-map (kbd "<tab>") 'company-complete)
-
+(define-key company-active-map (kbd "\C-d") 'company-show-doc-buffer)
 
 ;; -------------------------------------------
 ;; -- Org Mode Configuration ---
@@ -201,6 +200,7 @@
 ;; julia, julia-repl julia-snail package added
 ;;
 ;;(add-hook 'julia-mode-hook 'julia-repl-mode)  ; Don't use with julia-snail
+
 (set-language-environment "UTF-8")
 (add-to-list 'load-path "/path/to/julia-snail")
 (require 'julia-snail)
@@ -254,13 +254,24 @@
    (set-window-buffer w1 w1name)
    (run-with-timer 5.0 nil 'cider-repl-set-ns (cider-current-ns))))
 
+(defun clerk-show ()
+  (interactive)
+  (save-buffer)
+  (let
+      ((filename
+        (buffer-file-name)))
+    (when filename
+      (cider-interactive-eval
+       (concat "(nextjournal.clerk/show! \"" filename "\")")))))
+(define-key clojure-mode-map (kbd "<M-RET>") 'clerk-show) ;; RET in terminal vs. <return> in gui
+
+
 
 ;; -------------------------------------------
 ;; -- Clojure-lsp mode Configuration ---
 ;; -------------------------------------------
                                         ;
-(setq lsp-ui-sideline-show-diagnostics nil) ; lsp-diagnostics can be a pain to have all of the time
-
+;(setq lsp-ui-sideline-show-diagnostics nil) ; lsp-diagnostics can be a pain to have all of the time
 
 
 
