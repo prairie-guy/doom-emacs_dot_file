@@ -227,32 +227,38 @@
 ;; -------------------------------------------
 ;; -- Clojure Mode Configuration ---
 ;; -------------------------------------------
-(setq cider-show-error-buffer nil)
-(setq cljr-suppress-no-project-warning t)
-(setq cljr-add-ns-to-blank-clj-files nil) ; No need for a default ns in a new file
+
 (add-hook 'cider-mode-hook #'eldoc-mode) ; Enable eldoc in Clojure buffers
 (use-package cider
- ;:ensure t
- :config
- (setq cider-show-error-buffer nil)
+  :config
+  (setq cider-show-error-buffer nil)
+  (setq cljr-suppress-no-project-warning t)
+  (setq cljr-add-ns-to-blank-clj-files nil)
+  (setq cider-switch-to-repl-on-insert nil)    ; On insert, keep focus in buffer
+  (setq cider-invert-insert-eval-p t)          ; On insert, evaluate the results
+  (setq clojure-toplevel-inside-comment-form t); On insert, the (comment ) block is not the top form
 
-(defun cider-save-and-eval-buffer ()
-  (interactive)
-  (save-buffer)
-  (cider-load-buffer-and-switch-to-repl-buffer))
+  (define-key cider-mode-map (kbd "C-c C-v b") 'cider-eval-last-sexp-to-repl)
+  (define-key cider-mode-map (kbd "C-c RET") 'cider-insert-defun-in-repl)
+  (define-key cider-mode-map (kbd "C-c C-a") 'cider-format-defun)
 
-(define-key cider-mode-map (kbd "C-c C-b") 'cider-save-and-eval-buffer)
- ;(define-key cider-mode-map (kbd "C-c C-b") 'cider-load-buffer)
- (define-key cider-mode-map (kbd "C-c C-a") 'cider-format-defun)
- (defun run-clojure()
-   (interactive)
-   (+popup-mode 0)
-   (delete-other-windows)
-   (setq w1 (selected-window))
-   (setq w1name (buffer-name))
-   (cider-jack-in-clj nil)
-   (set-window-buffer w1 w1name)
-   (run-with-timer 5.0 nil 'cider-repl-set-ns (cider-current-ns))))
+  (defun cider-save-and-eval-buffer ()
+    (interactive)
+    (save-buffer)
+    (cider-load-buffer-and-switch-to-repl-buffer))
+  (define-key cider-mode-map (kbd "C-c C-b") 'cider-save-and-eval-buffer)
+
+  (defun run-clojure()
+    (interactive)
+    (+popup-mode 0)
+    (delete-other-windows)
+    (setq w1 (selected-window))
+    (setq w1name (buffer-name))
+    (cider-jack-in-clj nil)
+    (set-window-buffer w1 w1name)
+    (run-with-timer 5.0 nil 'cider-repl-set-ns (cider-current-ns)))
+
+)
 
 (defun clerk-show ()
   (interactive)
