@@ -52,13 +52,14 @@
 ;; CBD Installs
 ;; To install SOME-PACKAGE from MELPA, ELPA or emacsmirror:
 (package! undo-tree)
-
 (package! julia-mode)
 (package! julia-repl)
 (package! julia-snail)
 (package! org-bullets)
 (package! ess)
-;;Trying 'lsp' for both clojure and python, which are enabled in init.config with (clojure +lsp) and (python +lsp)
+;(package! lsp-julia)
+;;Trying 'lsp' for both clojure, python and julia
+;;which are enabled in init.config with (clojure +lsp), (python +lsp) (julia +lsp)
 ;;(package! elpy)
-;(package! lsp-mode)
+;(package! lsp-mode) ; not needed with (clojure +lsp)
 ;;(package! hy-mode)

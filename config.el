@@ -211,6 +211,7 @@
   (save-buffer)
   (julia-snail-send-buffer-file)
   (julia-snail))
+
 ; Save before sending over buffer
 (define-key julia-snail-mode-map  (kbd "C-c C-b") #'julia-snail-save-and-send-buffer-file)
 
@@ -222,7 +223,11 @@
 (add-to-list 'display-buffer-alist
              '("\\*julia" (display-buffer-reuse-window display-buffer-same-window)))
 
-
+;; Set up lsp-julia. NOT configured in init.el
+;; (use-package lsp-julia
+;;   :config
+;;   (setq lsp-julia-default-environment "~/.julia/environments/v1.7"))
+;; (add-hook 'julia-snail-mode-hook #'lsp-mode)
 
 ;; -------------------------------------------
 ;; -- Clojure Mode Configuration ---
