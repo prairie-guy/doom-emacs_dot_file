@@ -59,18 +59,14 @@
 (package! unidecode)
 (package! esxml)
 
-
 ;; Required for pubmed
 (package! pubmed)
-;;(package! pubmed-bibtex)
-;;(package! pubmed-openaccessbutton)
-;;(package! pubmed-pmc)
-;;(package! esxml-query)
-(package! ewoc)
-(package! eww)
-(package! json)
-(package! s)
-(package! url)
+;;(package! citar)
+;; (package! ewoc)
+;; (package! eww)
+;; (package! json)
+;; (package! s)
+;; (package! url)
 ;;(package! url-http)
 
 ;;(package! ess)

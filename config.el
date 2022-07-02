@@ -177,6 +177,18 @@
 ;; -------------------------------------------
 (setq bibtex-dialect 'biblatex)
 
+;; -------------------------------------------
+;; -- citar  Mode Configuration ---
+;; -------------------------------------------
+(use-package citar
+  :bind (("C-c b" . citar-insert-citation)
+         :map minibuffer-local-map
+         ("M-b" . citar-insert-preset))
+  :custom
+  (citar-bibliography  '("/home/cdaniels/uofc/bibtex-lib/bibliography.bib")))
+(setq! citar-library-paths '("/home/cdaniels/uofc/articles-lib")
+       citar-notes-paths   '("/home/cdaniels/uofc/articles-notes"))
+
 
 ;; -------------------------------------------
 ;; -- Pubmed  Mode Configuration ---
@@ -196,16 +208,14 @@
 (setq pubmed-bibtex-default-file "/home/cdaniels/uofc/bibtex-lib/bibliography.bib")
 (setq pubmed-bibtex-article-note t) ; How to add extra fields to bibtex
 (setq pubmed-bibtex-article-pubmed t)
-
+(setq pubmed-openaccessbutton-api-key "2a98a191b95c9169eb5b1730235c3e")
+(setq pubmed-springer-api-key "f3bce4ebf5b2b8c1747cf735b3c30728")
+(setq pubmed-unpaywall-email "devnullmenot@gmail.com")
+(setq pubmed-scihub-url "https://sci-hub.se")
 (require 'pubmed-unpaywall)
 (require 'pubmed-dissemin)
 (require 'pubmed-springer)
 (require 'pubmed-scihub)
-
-(setq pubmed-openaccessbutton-api-key "2a98a191b95c9169eb5b1730235c3e")
-(setq pubmed-springer-api-key "f3bce4ebf5b2b8c1747cf735b3c30728")
-(setq pubmed-unpaywall-email "devnullmenot@gmail.com")
-(setq pubmed-scihub-url "https://sci-hub.st")
 (setq pubmed-fulltext-functions '(pubmed-pmc pubmed-openaccessbutton pubmed-unpaywall pubmed-dissemin pubmed-scihub))
 
 
