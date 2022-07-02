@@ -56,8 +56,25 @@
 (package! julia-repl)
 (package! julia-snail)
 (package! org-bullets)
-(package! ess)
-;(package! lsp-julia)
+(package! unidecode)
+(package! esxml)
+
+
+;; Required for pubmed
+(package! pubmed)
+;;(package! pubmed-bibtex)
+;;(package! pubmed-openaccessbutton)
+;;(package! pubmed-pmc)
+;;(package! esxml-query)
+(package! ewoc)
+(package! eww)
+(package! json)
+(package! s)
+(package! url)
+;;(package! url-http)
+
+;;(package! ess)
+;;(package! lsp-julia)
 ;;Trying 'lsp' for both clojure, python and julia
 ;;which are enabled in init.config with (clojure +lsp), (python +lsp) (julia +lsp)
 ;;(package! elpy)

@@ -25,7 +25,10 @@
 ;; There are two ways to load a theme. Both assume the theme is installed and
 ;; available. You can either set `doom-theme' or manually load a theme with the
 ;; `load-theme' function. This is the default:
-(setq doom-theme 'doom-one)
+;;(setq doom-theme 'doom-one)
+;;(setq doom-theme 'doom-horizon)
+;;(setq doom-theme 'doom-monokai-pro)
+(setq doom-theme 'doom-sourcerer)
 
 ;; If you use `org' and don't want your org files in the default location below,
 ;; change `org-directory'. It must be set before org loads!
@@ -164,11 +167,52 @@
  org-fontify-done-headline t
  org-hide-leading-stars t
  org-pretty-entities t
- org-ascii-text-width 95
- )
+ org-ascii-text-width 95)
 
 ;; (use-package org-bullets
 ;;   :hook (org-mode . org-bullets-mode))
+
+;; -------------------------------------------
+;; -- Bibtex  Mode Configuration ---
+;; -------------------------------------------
+(setq bibtex-dialect 'biblatex)
+
+
+;; -------------------------------------------
+;; -- Pubmed  Mode Configuration ---
+;; -------------------------------------------
+;; git clone git@github.com:emacsmirror/pubmed.git
+;; https://github.com/emacsmirror/pubmed
+;; https://openaccessbutton.org/api
+;; https://dev.springernature.com/admin/applications
+
+;; (use-package pubmed
+;;   :ensure t
+;;   :commands (pubmed-search pubmed-advanced-search pubmed-unpaywall pubmed-dissemin pubmed-springer pubmed-scihub))
+(require 'pubmed)
+(require 'pubmed-advanced-search)
+(setq pubmed-api-key "772024ac885b3a0055c302ab295f41ce5c08")
+(setq pubmed-bibtex-keypattern "[pmid]")
+(setq pubmed-bibtex-default-file "/home/cdaniels/uofc/bibtex-lib/bibliography.bib")
+(setq pubmed-bibtex-article-note t) ; How to add extra fields to bibtex
+(setq pubmed-bibtex-article-pubmed t)
+
+(require 'pubmed-unpaywall)
+(require 'pubmed-dissemin)
+(require 'pubmed-springer)
+(require 'pubmed-scihub)
+
+(setq pubmed-openaccessbutton-api-key "2a98a191b95c9169eb5b1730235c3e")
+(setq pubmed-springer-api-key "f3bce4ebf5b2b8c1747cf735b3c30728")
+(setq pubmed-unpaywall-email "devnullmenot@gmail.com")
+(setq pubmed-scihub-url "https://sci-hub.st")
+(setq pubmed-fulltext-functions '(pubmed-pmc pubmed-openaccessbutton pubmed-unpaywall pubmed-dissemin pubmed-scihub))
+
+
+;; (defun shell-region (start end)
+;;   "execute region in an inferior shell"
+;;   (interactive "r")
+;;   (shell-command  (buffer-substring-no-properties start end)))
 
 
 ;; ---------------------------
@@ -179,6 +223,8 @@
 ;;
 (setq +python-ipython-repl-args '("-i" "--simple-prompt" "--no-color-info"))
 (setq +python-jupyter-repl-args '("--simple-prompt"))
+
+(setq python-shell-interpreter "ipython") ;; Much nicer environment
 
 (defun python-send-region-or-buffer-switch ()
   (interactive)
@@ -275,7 +321,6 @@
       (cider-interactive-eval
        (concat "(nextjournal.clerk/show! \"" filename "\")")))))
 (define-key clojure-mode-map (kbd "<M-RET>") 'clerk-show) ;; RET in terminal vs. <return> in gui
-
 
 
 ;; -------------------------------------------
