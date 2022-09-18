@@ -1,10 +1,11 @@
 # doom-emacs_dot_file 
 My personal doom-emacs configuration, tuned for my needs. It is customized from the default doom-emacs. I didn't want to use evil, so I unplugged it. This is based on the configuration I had in: https://github.com/prairie-guy/emacs_dotfile 
 
-### Installing on Ubuntu emacs26 or greater:
+### Installing on Ubuntu emacs27 or greater:
 * add-apt-repository ppa:kelleyk/emacs
 * apt-get update
-* apt-get install emacs26
+* apt remove --autoremove emacs emacs-common (For old versions)
+* apt-get install emacs28
 
 ### Installing on OSx emacs26 or greater:
 * brew tap d12frosted/emacs-plus
@@ -18,6 +19,11 @@ My personal doom-emacs configuration, tuned for my needs. It is customized from 
 ### Install fd, a faster find: (https://github.com/sharkdp/fd)
 * Linux: apt-get install fd-find
 * OSx : brew install coreutils fd
+
+### Other system sequirements (vterm, make, cmake, xclip)
+* apt-get install libvterm-dev
+* apt-get install make cmake
+* apt-get install xclip
 
 ### Edit ~/.bashrc
 * `export PATH="~/.emacs.d/bin:$PATH"`
