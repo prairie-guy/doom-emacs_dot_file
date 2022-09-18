@@ -28,7 +28,7 @@ My personal doom-emacs configuration, tuned for my needs. It is customized from 
 * Remember to use ssh-address to clone this repository. That allows `git push` authentication through ssh-key.
 
 ### Install doom:
-* git clone https://github.com/hlissner/doom-emacs ~/.emacs.d
+* git clone --depth 1 https://github.com/doomemacs/doomemacs ~/.emacs.d
 * ~/.emacs.d/bin/doom install (doom install)
 * doom sync
 
