@@ -94,7 +94,6 @@
        ;;gist              ; interacting with github gists
        lookup              ; navigate your code and its documentation
        ;;lsp
-       macos             ; MacOS-specific commands
        magit             ; a git porcelain for Emacs
        ;;make              ; run make tasks from Emacs
        ;;pass              ; password manager for nerds
@@ -108,6 +107,7 @@
 
        :os
        tty               ; improve the terminal Emacs experience
+       macos             ; MacOS-specific commands
 
        :lang
        ;;agda              ; types of types of types of types...
@@ -163,7 +163,7 @@
        ;;rust              ; Fe2O3.unwrap().unwrap().unwrap().unwrap()
        ;;scala             ; java, but good
        ;;scheme            ; a fully conniving family of lisps
-       ba                ; she sells {ba,z,fi}sh shells on the C xor
+       ;;ba                ; she sells {ba,z,fi}sh shells on the C xor
        ;;sml
        ;;solidity          ; do you need a blockchain? No.
        ;;swift             ; who asked for emoji variables?
