@@ -234,7 +234,7 @@
 (setq +python-ipython-repl-args '("-i" "--simple-prompt" "--no-color-info"))
 (setq +python-jupyter-repl-args '("--simple-prompt"))
 
-(setq python-shell-interpreter "ipython") ;; Much nicer environment
+;(setq python-shell-interpreter "ipython") ;; Much nicer environment
 
 (defun python-send-region-or-buffer-switch ()
   (interactive)
