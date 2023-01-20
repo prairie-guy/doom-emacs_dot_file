@@ -185,7 +185,7 @@
          :map minibuffer-local-map
          ("M-b" . citar-insert-preset))
   :custom
-  (citar-bibliography  '("/home/cdaniels/uofc/bibtex-lib/bibliography.bib")))
+  (citar-bibliography  '("/home/cdaniels/uofc/bibtex-lib/refs.bib")))
 (setq! citar-library-paths '("/home/cdaniels/uofc/articles-lib")
        citar-notes-paths   '("/home/cdaniels/uofc/articles-notes"))
 
