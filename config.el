@@ -189,7 +189,6 @@
 (setq! citar-library-paths '("/home/cdaniels/uofc/Articles/articles-lib")
        citar-notes-paths   '("/home/cdaniels/uofc/Articles/articles-notes"))
 
-
 ;; -------------------------------------------
 ;; -- Pubmed  Mode Configuration ---
 ;; -------------------------------------------
