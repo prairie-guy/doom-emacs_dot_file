@@ -1,4 +1,7 @@
+# CBD
 custom.el
+# Temp files
+*~
 
 # Useful but not worth saving
 *.undo-tree~
