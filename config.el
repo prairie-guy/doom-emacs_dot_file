@@ -186,8 +186,25 @@
          ("M-b" . citar-insert-preset))
   :custom
   (citar-bibliography  '("/home/cdaniels/uofc/Articles/bibtex-lib/refs.bib")))
+
 (setq! citar-library-paths '("/home/cdaniels/uofc/Articles/articles-lib")
        citar-notes-paths   '("/home/cdaniels/uofc/Articles/articles-notes"))
+(setq citar-templates
+      '((main . "${author editor:30}     ${date year issued:4}     ${title:48}")
+        (suffix . "          ${=key= id:15}    ${=type=:12}    ${tags keywords:*}")
+        (preview . "${author editor} (${year issued date}) ${title}, ${journal journaltitle publisher container-title collection-title}.\n")
+        (note . "Notes on ${title}
+
+* Reference:
+${author editor} (${year issued date}) ${title}, ${journal journaltitle publisher container-title collection-title}. DOI: https://doi.org/${DOI}, PMID: ${PMID}
+
+* Abstract"))) ;; DONT MESS UP FORMAT OF THIS CITAR BLOCK
+
+(use-package citar-embark
+  :after citar embark
+  :no-require
+  :config (citar-embark-mode))
+
 
 ;; -------------------------------------------
 ;; -- Pubmed  Mode Configuration ---
