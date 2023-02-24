@@ -110,6 +110,9 @@
 (setq split-width-threshold 80) ; Split screen side-by-side if min 80 width
 ;;;;(global-set-key "\C-h" 'delete-backward-char) ; required to fix DEL key -- Need to reassign help
 
+;; Buffer use vertico-style mini-buffer. C-x b works, but my fingers still use C-x C-b
+(map! "C-x C-b" #'+vertico/switch-workspace-buffer)
+
 ;; -----------------------------------------
 ;; -- Global iPad Mouse/Trackpad Scrolling --
 ;; -----------------------------------------
@@ -118,6 +121,7 @@
 
 ;; -----------------------------------------
 ;; -- Undo-tree--mode configuration --
+;; -- Added in init.el (undo +tree)
 ;; -----------------------------------------
 ;; undo-tree package added
 (global-undo-tree-mode)
@@ -305,48 +309,48 @@ ${author editor} (${year issued date}) ${title}, ${journal journaltitle publishe
 ;; -- Clojure Mode Configuration ---
 ;; -------------------------------------------
 
-(add-hook 'cider-mode-hook #'eldoc-mode) ; Enable eldoc in Clojure buffers
-(use-package cider
-  :config
-  (setq cider-show-error-buffer nil)
-  (setq cljr-suppress-no-project-warning t)
-  (setq cljr-add-ns-to-blank-clj-files nil)
-  (setq cider-switch-to-repl-on-insert nil)    ; On insert, keep focus in buffer
-  (setq cider-invert-insert-eval-p t)          ; On insert, evaluate the results
-  (setq clojure-toplevel-inside-comment-form t); On insert, the (comment ) block is not the top form
+;; CBD UNCOMMENT TO START USING CLOJURE AGAIN. ALSO ADD IN init.el
 
-  (define-key cider-mode-map (kbd "C-c C-v b") 'cider-eval-last-sexp-to-repl)
-  (define-key cider-mode-map (kbd "C-c RET") 'cider-insert-defun-in-repl)
-  (define-key cider-mode-map (kbd "C-c C-a") 'cider-format-defun)
+;; (add-hook 'cider-mode-hook #'eldoc-mode) ; Enable eldoc in Clojure buffers
+;; (use-package cider
+;;   :config
+;;   (setq cider-show-error-buffer nil)
+;;   (setq cljr-suppress-no-project-warning t)
+;;   (setq cljr-add-ns-to-blank-clj-files nil)
+;;   (setq cider-switch-to-repl-on-insert nil)    ; On insert, keep focus in buffer
+;;   (setq cider-invert-insert-eval-p t)          ; On insert, evaluate the results
+;;   (setq clojure-toplevel-inside-comment-form t); On insert, the (comment ) block is not the top form
 
-  (defun cider-save-and-eval-buffer ()
-    (interactive)
-    (save-buffer)
-    (cider-load-buffer-and-switch-to-repl-buffer))
-  (define-key cider-mode-map (kbd "C-c C-b") 'cider-save-and-eval-buffer)
+;;   (define-key cider-mode-map (kbd "C-c C-v b") 'cider-eval-last-sexp-to-repl)
+;;   (define-key cider-mode-map (kbd "C-c RET") 'cider-insert-defun-in-repl)
+;;   (define-key cider-mode-map (kbd "C-c C-a") 'cider-format-defun)
 
-  (defun run-clojure()
-    (interactive)
-    (+popup-mode 0)
-    (delete-other-windows)
-    (setq w1 (selected-window))
-    (setq w1name (buffer-name))
-    (cider-jack-in-clj nil)
-    (set-window-buffer w1 w1name)
-    (run-with-timer 5.0 nil 'cider-repl-set-ns (cider-current-ns)))
+;;   (defun cider-save-and-eval-buffer ()
+;;     (interactive)
+;;     (save-buffer)
+;;     (cider-load-buffer-and-switch-to-repl-buffer))
+;;   (define-key cider-mode-map (kbd "C-c C-b") 'cider-save-and-eval-buffer)
 
-)
+;;   (defun run-clojure()
+;;     (interactive)
+;;     (+popup-mode 0)
+;;     (delete-other-windows)
+;;     (setq w1 (selected-window))
+;;     (setq w1name (buffer-name))
+;;     (cider-jack-in-clj nil)
+;;     (set-window-buffer w1 w1name)
+;;     (run-with-timer 5.0 nil 'cider-repl-set-ns (cider-current-ns))))
 
-(defun clerk-show ()
-  (interactive)
-  (save-buffer)
-  (let
-      ((filename
-        (buffer-file-name)))
-    (when filename
-      (cider-interactive-eval
-       (concat "(nextjournal.clerk/show! \"" filename "\")")))))
-(define-key clojure-mode-map (kbd "<M-RET>") 'clerk-show) ;; RET in terminal vs. <return> in gui
+;; (defun clerk-show ()
+;;   (interactive)
+;;   (save-buffer)
+;;   (let
+;;       ((filename
+;;         (buffer-file-name)))
+;;     (when filename
+;;       (cider-interactive-eval
+;;        (concat "(nextjournal.clerk/show! \"" filename "\")")))))
+;; (define-key clojure-mode-map (kbd "<M-RET>") 'clerk-show) ;; RET in terminal vs. <return> in gui
 
 
 ;; -------------------------------------------

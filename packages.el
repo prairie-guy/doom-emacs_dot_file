@@ -51,13 +51,14 @@
 
 ;; CBD Installs
 ;; To install SOME-PACKAGE from MELPA, ELPA or emacsmirror:
+;; (package! esxml)
+;; (package! unidecode)
 (package! undo-tree)
+(package! org-bullets)
 (package! julia-mode)
 (package! julia-repl)
 (package! julia-snail)
-(package! org-bullets)
-(package! unidecode)
-(package! esxml)
+
 
 ;; Required for pubmed
 (package! pubmed)

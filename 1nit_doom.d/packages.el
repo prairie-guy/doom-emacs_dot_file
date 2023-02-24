@@ -48,3 +48,31 @@
 ;(unpin! pinned-package another-pinned-package)
 ;; ...Or *all* packages (NOT RECOMMENDED; will likely break things)
 ;(unpin! t)
+
+;; CBD Installs
+;; To install SOME-PACKAGE from MELPA, ELPA or emacsmirror:
+;;(package! undo-tree)
+(package! julia-mode)
+(package! julia-repl)
+(package! julia-snail)
+(package! org-bullets)
+(package! unidecode)
+(package! esxml)
+
+;; Required for pubmed
+(package! pubmed)
+;;(package! citar)
+;; (package! ewoc)
+;; (package! eww)
+;; (package! json)
+;; (package! s)
+;; (package! url)
+;;(package! url-http)
+
+;;(package! ess)
+;;(package! lsp-julia)
+;;Trying 'lsp' for both clojure, python and julia
+;;which are enabled in init.config with (clojure +lsp), (python +lsp) (julia +lsp)
+;;(package! elpy)
+;(package! lsp-mode) ; not needed with (clojure +lsp)
+;;(package! hy-mode)
