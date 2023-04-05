@@ -270,15 +270,14 @@ ${author editor} (${year issued date}) ${title}, ${journal journaltitle publishe
 
 
 ;; -------------------------------------------
-;; -- Julia Mode Configuration ---
+;; -- Julia Snail Mode Configuration ---
 ;; -------------------------------------------
 ;; julia not uncommented in .doom.d/init.el
 ;; julia, julia-repl julia-snail package added
 ;;
-;;(add-hook 'julia-mode-hook 'julia-repl-mode)  ; Don't use with julia-snail
 
 (set-language-environment "UTF-8")
-(add-to-list 'load-path "/path/to/julia-snail")
+;;(add-to-list 'load-path "/path/to/julia-snail")
 (require 'julia-snail)
 (add-hook 'julia-mode-hook #'julia-snail-mode)
 
