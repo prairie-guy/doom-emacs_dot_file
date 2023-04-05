@@ -14,5 +14,6 @@
 ([nil nil ((7144 . 7147)) nil (25643 2921 332731 343000) 0 nil])
 ([nil nil ((7147 . 7160)) nil (25643 2921 332730 193000) 0 nil])
 ([nil nil ((#("s" 0 1 (fontified t ws-butler-chg chg face font-lock-comment-face)) . -7159) (undo-tree-id0 . -1) 7160) nil (25643 2921 332727 953000) 0 nil])
-([nil current ((7159 . 7160)) nil (25643 2921 332711 913000) 0 nil])
+([nil current ((7159 . 7160)) nil (25645 52186 607172 984000) 0 nil])
+([nil nil ((#(";;" 0 1 (fontified t face font-lock-comment-delimiter-face) 1 2 (fontified t face font-lock-comment-delimiter-face)) . 5695)) ((5695 . 5697) (t 25645 50938 168180 841000)) (25645 52186 65509 232000) 0 nil])
 nil
