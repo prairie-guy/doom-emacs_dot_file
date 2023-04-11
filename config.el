@@ -173,6 +173,45 @@
  org-pretty-entities t
  org-ascii-text-width 95)
 
+;; Within in an org-file, allows the link [[img/foo.jpg]]
+;; to be embedded within a single html file when called with
+;; M-x org-html-export-to-html
+;; https://www.reddit.com/r/orgmode/comments/12gxa8s/how_to_generate_a_single_htmlfile_with_embedded/
+;; https://www.youtube.com/watch?v=eaZUZCzaIgw (YouTube Video on how to create the function defined here)
+(with-eval-after-load 'ol
+    (org-link-set-parameters
+     "img"
+     :follow (lambda (path arg) (org-link-open-as-file path arg))
+     :export (lambda (path desc backend cchannel)
+               (cond ((eq backend 'html)
+                      (format "<img style=\"max-width:95%%;margin:2em\" src=\"data:%s;base64,%s\">"
+                              (mailcap-file-name-to-mime-type path)
+                              (base64-encode-string
+                               (with-temp-buffer
+                                 (insert-file-contents path)
+                                  (buffer-string)))))))))
+
+;; Does the same for pdf files, but doesn't seem to work
+(with-eval-after-load 'ox-latex
+(add-to-list 'org-latex-inline-image-rules `("img" . ,(rx "."
+                   (or "pdf" "jpeg" "jpg" "png" "ps" "eps" "tikz" "pgf" "svg")
+                   eos))))
+
+;; org-tufte is an org package to "beautify" org-file code to html-code, including inlining images
+;; https://github.com/Zilong-Li/org-tufte
+;; M-x export-org-tufte-html
+;;
+;; (add-to-list 'load-path "/home/cdaniels/.doom.d/") ; This is the directory path not the file path
+;; (require 'org-tufte)
+;; (use-package org-tufte
+;;   :ensure nil
+;;   :init (add-to-list 'load-path "PATH*")
+;;   :config
+;;   (require 'org-tufte)
+;;   ;(setq org-tufte-htmlize-code t)
+;;   )
+
+
 ;; (use-package org-bullets
 ;;   :hook (org-mode . org-bullets-mode))
 
@@ -372,4 +411,3 @@ ${author editor} (${year issued date}) ${title}, ${journal journaltitle publishe
 ;;       '("--repl-output-fn" "hy.contrib.hy-repr.hy-repr")
 ;;       hy-jedhy--enable? nil)
 ;; (add-hook 'hy-mode-hook (lambda () (company-mode)))
-

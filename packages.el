@@ -59,6 +59,7 @@
 (package! julia-repl)
 (package! julia-snail)
 
+(package! ox-pandoc) ;; Exporting docs
 
 ;; Required for pubmed
 (package! pubmed)
