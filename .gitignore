@@ -4,6 +4,7 @@ custom.el
 *~
 
 # Useful but not worth saving
+*.~undo-tree~
 *.undo-tree~
 **/*undo-tree~
 

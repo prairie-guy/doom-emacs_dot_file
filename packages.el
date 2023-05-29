@@ -63,13 +63,14 @@
 
 ;; Required for pubmed
 (package! pubmed)
-;;(package! citar)
+(package! citar)
+;;(package! url)
+;;(package! url-http)
 ;; (package! ewoc)
 ;; (package! eww)
 ;; (package! json)
 ;; (package! s)
-;; (package! url)
-;;(package! url-http)
+
 
 ;;(package! ess)
 ;;(package! lsp-julia)
