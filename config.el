@@ -173,7 +173,7 @@
  org-pretty-entities t
  org-ascii-text-width 95)
 
-;; Within in an org-file, allows the link [[img/foo.jpg]]
+;; Within in an org-file, org-insert-link (C-c C-l) can create link [[img/foo.jpg]]
 ;; to be embedded within a single html file when called with
 ;; M-x org-html-export-to-html
 ;; https://www.reddit.com/r/orgmode/comments/12gxa8s/how_to_generate_a_single_htmlfile_with_embedded/
@@ -197,6 +197,7 @@
                    (or "pdf" "jpeg" "jpg" "png" "ps" "eps" "tikz" "pgf" "svg")
                    eos))))
 
+
 ;; org-tufte is an org package to "beautify" org-file code to html-code, including inlining images
 ;; https://github.com/Zilong-Li/org-tufte
 ;; M-x export-org-tufte-html
@@ -214,6 +215,16 @@
 
 ;; (use-package org-bullets
 ;;   :hook (org-mode . org-bullets-mode))
+
+
+;; -------------------------------------------
+;; -- scimax  functionality ---
+;; -------------------------------------------
+;; Added scimax babel functionality https://github.com/jkitchin/scimax
+;;(load! "scimax/scimax-ob.elc")
+(with-eval-after-load 'org
+  (load! "scimax/scimax-ob.elc"))
+
 
 ;; -------------------------------------------
 ;; -- Bibtex  Mode Configuration ---
@@ -294,6 +305,7 @@ ${author editor} (${year issued date}) ${title}, ${journal journaltitle publishe
 (setq +python-jupyter-repl-args '("--simple-prompt"))
 
 ;(setq python-shell-interpreter "ipython") ;; Much nicer environment
+(setq python-shell-interpreter "/home/cdaniels/mambaforge/envs/fastai/bin/python")
 
 (defun python-send-region-or-buffer-switch ()
   (interactive)

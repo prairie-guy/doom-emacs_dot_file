@@ -59,7 +59,11 @@
 (package! julia-repl)
 (package! julia-snail)
 
-(package! ox-pandoc) ;; Exporting docs
+
+;; Required to use scimax-ob for improved orgmode babel
+(package! hydra)
+
+;;(package! ox-pandoc) ;; Exporting docs
 
 ;; Required for pubmed
 (package! pubmed)
@@ -70,6 +74,7 @@
 ;; (package! eww)
 ;; (package! json)
 ;; (package! s)
+
 
 
 ;;(package! ess)
