@@ -59,6 +59,8 @@
 (package! julia-repl)
 (package! julia-snail)
 
+(package! snakemake-mode)
+
 
 ;; Required to use scimax-ob for improved orgmode babel
 (package! hydra)
