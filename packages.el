@@ -65,7 +65,11 @@
 ;; Required to use scimax-ob for improved orgmode babel
 (package! hydra)
 
-;;(package! ox-pandoc) ;; Exporting docs
+;; Exporting docs
+;;(package! ox-pandoc)
+
+;; Quatro Markdown
+;;(package! quarto-mode)
 
 ;; Required for pubmed
 (package! pubmed)

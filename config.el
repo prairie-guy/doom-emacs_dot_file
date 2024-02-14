@@ -111,7 +111,10 @@
 ;;;;(global-set-key "\C-h" 'delete-backward-char) ; required to fix DEL key -- Need to reassign help
 
 ;; Buffer use vertico-style mini-buffer. C-x b works, but my fingers still use C-x C-b
+;;(map! "C-x C-b" #'+vertico/switch-workspace-buffer)
 (map! "C-x C-b" #'+vertico/switch-workspace-buffer)
+;;
+(global-set-key (kbd "C-x b") 'ibuffer)
 
 ;; -----------------------------------------
 ;; -- Global iPad Mouse/Trackpad Scrolling --
@@ -157,6 +160,8 @@
 ;; -- company configuration --
 ;; ---------------------------
 (global-company-mode)
+(after! company (add-to-list 'company-backends 'company-files)) ;; open filenames
+(global-set-key (kbd "C-c f c") 'company-files) ;; Acticate company filename search
 (define-key company-active-map (kbd "\C-n") 'company-select-next)
 (define-key company-active-map (kbd "\C-p") 'company-select-previous)
 (define-key company-active-map (kbd "\C-d") 'company-show-doc-buffer)
@@ -218,6 +223,14 @@
 
 
 ;; -------------------------------------------
+;; -- Markdown  ---
+;; -------------------------------------------
+;; Add markdown-mode for files with .qmd extension
+(add-to-list 'auto-mode-alist '("\\.qmd\\'" . markdown-mode))
+
+
+
+;; -------------------------------------------
 ;; -- scimax  functionality ---
 ;; -------------------------------------------
 ;; Added scimax babel functionality https://github.com/jkitchin/scimax
@@ -259,7 +272,7 @@ ${author editor} (${year issued date}) ${title}, ${journal journaltitle publishe
   :no-require
   :config (citar-embark-mode))
 
-
+;;
 ;; -------------------------------------------
 ;; -- Pubmed  Mode Configuration ---
 ;; -------------------------------------------
@@ -305,7 +318,7 @@ ${author editor} (${year issued date}) ${title}, ${journal journaltitle publishe
 (setq +python-jupyter-repl-args '("--simple-prompt"))
 
 ;;Choose python or iPython
-(setq python-shell-interpreter "ipython") ;; Much nicer environment
+;(setq python-shell-interpreter "ipython") ;; Much nicer environment
 ;(setq python-shell-interpreter "/home/cdaniels/mambaforge/envs/fastai/bin/python")
 
 (defun python-send-region-or-buffer-switch ()
