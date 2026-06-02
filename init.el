@@ -107,7 +107,7 @@
 
        :os
        tty               ; improve the terminal Emacs experience
-       macos             ; MacOS-specific commands
+       macos             ; MacOS-specific commands (kept: config is shared w/ a Mac; inert on Linux)
 
        :lang
        ;;agda              ; types of types of types of types...
