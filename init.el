@@ -68,7 +68,7 @@
        dired             ; making dired pretty [functional]
        electric          ; smarter, keyword-based electric-indent
        ;;ibuffer           ; interactive buffer management
-       ;;(undo +tree)         ; persistent, smarter undo for your inevitable mistakes (CBD: undo-tree added in config.el)
+       undo              ; persistent, smarter undo (undo-fu + undo-fu-session; vundo for visual tree)
        vc                ; version-control and Emacs, sitting in a tree
 
        :term

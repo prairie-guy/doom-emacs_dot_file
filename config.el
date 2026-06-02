@@ -115,11 +115,18 @@
 (global-set-key (kbd "<mouse-4>") 'scroll-down-line)
 
 ;; -----------------------------------------
-;; -- Undo-tree--mode configuration --
-;; -- Added in init.el (undo +tree)
+;; -- Undo configuration --
 ;; -----------------------------------------
-;; undo-tree package added
-(global-undo-tree-mode)
+;; Doom's :emacs undo module provides undo-fu + persistent undo-fu-session.
+;; vundo gives a visual undo tree. Bind it to C-x u (the key undo-tree used to
+;; grab) so existing muscle memory opens the tree, plus SPC o u via the leader.
+(map! "C-x u" #'vundo
+      :leader :desc "Visual undo tree" "o u" #'vundo)
+
+;; In the vundo tree, use n/p for prev/next node (default is f/b); keep f/b too.
+(after! vundo
+  (define-key vundo-mode-map (kbd "n") #'vundo-forward)
+  (define-key vundo-mode-map (kbd "p") #'vundo-backward))
 
 ;; ---------------------------
 ;; -- smartparens configuration --
@@ -169,6 +176,12 @@
  org-hide-leading-stars t
  org-pretty-entities t
  org-ascii-text-width 95)
+
+;; org-modern + org-appear come from Doom's (org +pretty) flag and are already
+;; enabled/configured by Doom -- we only layer terminal-friendly tweaks on top.
+;; (block-fringe uses GUI fringe bitmaps; disable so blocks look right in -nw.)
+(after! org-modern
+  (setq org-modern-block-fringe nil))
 
 ;; Within in an org-file, org-insert-link (C-c C-l) can create link [[img/foo.jpg]]
 ;; to be embedded within a single html file when called with

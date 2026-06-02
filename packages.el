@@ -53,8 +53,13 @@
 ;; To install SOME-PACKAGE from MELPA, ELPA or emacsmirror:
 ;; (package! esxml)
 ;; (package! unidecode)
-(package! undo-tree)
-(package! org-bullets)
+;; Undo: use Doom's default undo-fu (via :emacs undo) + vundo for a visual tree.
+;; (Replaced undo-tree, which littered *.~undo-tree~ files and had history bugs.)
+(package! vundo)
+
+;; NOTE: org-modern + org-appear are ALREADY provided by Doom's (org +pretty)
+;; flag in init.el -- no (package! org-modern) needed. Removed abandoned org-bullets.
+
 (package! julia-mode)
 (package! julia-repl)
 (package! julia-snail)
