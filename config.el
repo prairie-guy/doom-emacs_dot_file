@@ -63,41 +63,33 @@
 ;; -- CBD System Requirements and Configuration --
 ;; -----------------------------------------
 ;;
-;;  Install on Ubuntu emacs26 or greater: (may need )
-;;  - add-apt-repository ppa:kelleyk/emacs
-;;  - apt-get update
-;;  - apt-get install emacs26
+;;  Current stack (updated 2026-06): GNU Emacs 30.2 + Doom Emacs, terminal-only.
 ;;
-;;  Install on OSx emacs26 or greater:
-;;  - brew tap d12frosted/emacs-plus
-;;  - brew install emacs-plus
-;;  - ln -s /usr/local/opt/emacs-plus/Emacs.app /Applications/Emacs.app
+;;  Install Emacs 30.x on Ubuntu 24.04 (terminal-only build):
+;;  - sudo add-apt-repository ppa:ubuntuhandbook1/emacs
+;;  - sudo apt update
+;;  - sudo apt install emacs-nox emacs-common
 ;;
-;;  Install ripgrep a faster grep (https://github.com/BurntSushi/ripgrep)
-;;  - apt-get install git ripgrep
+;;  Install Emacs on macOS:
+;;  - brew install emacs-plus    (https://github.com/d12frosted/homebrew-emacs-plus)
 ;;
-;;  Install fd a faster find (https://github.com/sharkdp/fd)
-;;  - apt-get install fd-find
+;;  Search/find tools Doom uses:
+;;  - sudo apt install git ripgrep fd-find
 ;;
-;;  Install doom:
-;;  - git clone https://github.com/hlissner/doom-emacs ~/.emacs.d
-;;  - ~/.emacs.d/bin/doom install (doom install)
-;;  - doom sync
+;;  Install Doom (modern XDG location):
+;;  - git clone --depth 1 https://github.com/doomemacs/doomemacs ~/.config/emacs
+;;  - ~/.config/emacs/bin/doom install
 ;;
-;;  doom documentation:
-;;  - https://github.com/hlissner/doom-emacs/blob/develop/docs/getting_started.org
-;;  - https://github.com/hlissner/doom-emacs/blob/develop/docs/index.org
-;;  - https://github.com/hlissner/doom-emacs/blob/develop/modules/editor/evil/README.org to unplug evil
-;;  - https://github.com/hlissner/doom-emacs/blob/develop/modules/config/default/+emacs-bindings.el for emacs only bindings
+;;  Doom binaries live in ~/.config/emacs/bin (on PATH):
+;;  - doom sync     # run after editing init.el or packages.el (NOT needed for config.el)
+;;  - doom doctor   # check environment/config consistency
+;;  - doom upgrade  # update Doom itself + packages
+;;  - doom docs     # documentation (or in-Emacs: 'SPC h d h' / 'C-h d h')
 ;;
-;;  doom binaries are located in ~/.emacs.d  # Don't change anything here:
-;;  - doom sync   # Update after editing configuration files
-;;  - doom doctor # Check that system is consistent
-;;
-;;  Configuration is done in ~/.doom.d/
-;;  - init.el     # General parameter selections. Choose options, but don't further configurations
-;;  - package.el  # Add additional packages. Don't use melapa or add packages otherwise
-;;  - confit.el   # This file. This is where personal customization should take place
+;;  Personal configuration lives in ~/.doom.d/ :
+;;  - init.el      # enable/disable Doom modules + flags (run 'doom sync' after edits)
+;;  - packages.el  # extra packages via (package! ...) (run 'doom sync' after edits)
+;;  - config.el    # THIS file -- personal customization (no sync needed)
 
 
 ;;
@@ -203,25 +195,6 @@
                    eos))))
 
 
-;; org-tufte is an org package to "beautify" org-file code to html-code, including inlining images
-;; https://github.com/Zilong-Li/org-tufte
-;; M-x export-org-tufte-html
-;;
-;; (add-to-list 'load-path "/home/cdaniels/.doom.d/") ; This is the directory path not the file path
-;; (require 'org-tufte)
-;; (use-package org-tufte
-;;   :ensure nil
-;;   :init (add-to-list 'load-path "PATH*")
-;;   :config
-;;   (require 'org-tufte)
-;;   ;(setq org-tufte-htmlize-code t)
-;;   )
-
-
-;; (use-package org-bullets
-;;   :hook (org-mode . org-bullets-mode))
-
-
 ;; -------------------------------------------
 ;; -- Markdown  ---
 ;; -------------------------------------------
@@ -263,18 +236,10 @@ ${author editor} (${year issued date}) ${title}, ${journal journaltitle publishe
   :no-require
   :config (citar-embark-mode))
 
-;; (defun shell-region (start end)
-;;   "execute region in an inferior shell"
-;;   (interactive "r")
-;;   (shell-command  (buffer-substring-no-properties start end)))
-
 
 ;; ---------------------------
 ;; -- Python configuration --
 ;; ---------------------------
-;; elpy package added
-;; (elpy-enable)
-;;
 (setq +python-ipython-repl-args '("-i" "--simple-prompt" "--no-color-info"))
 (setq +python-jupyter-repl-args '("--simple-prompt"))
 
@@ -324,77 +289,3 @@ ${author editor} (${year issued date}) ${title}, ${journal journaltitle publishe
 (add-to-list 'display-buffer-alist
              '("\\*julia" (display-buffer-reuse-window display-buffer-same-window)))
 
-;; Set up lsp-julia. NOT configured in init.el
-;; (use-package lsp-julia
-;;   :config
-;;   (setq lsp-julia-default-environment "~/.julia/environments/v1.7"))
-;; (add-hook 'julia-snail-mode-hook #'lsp-mode)
-
-;; -------------------------------------------
-;; -- Clojure Mode Configuration ---
-;; -------------------------------------------
-
-;; CBD UNCOMMENT TO START USING CLOJURE AGAIN. ALSO ADD IN init.el
-
-;; (add-hook 'cider-mode-hook #'eldoc-mode) ; Enable eldoc in Clojure buffers
-;; (use-package cider
-;;   :config
-;;   (setq cider-show-error-buffer nil)
-;;   (setq cljr-suppress-no-project-warning t)
-;;   (setq cljr-add-ns-to-blank-clj-files nil)
-;;   (setq cider-switch-to-repl-on-insert nil)    ; On insert, keep focus in buffer
-;;   (setq cider-invert-insert-eval-p t)          ; On insert, evaluate the results
-;;   (setq clojure-toplevel-inside-comment-form t); On insert, the (comment ) block is not the top form
-
-;;   (define-key cider-mode-map (kbd "C-c C-v b") 'cider-eval-last-sexp-to-repl)
-;;   (define-key cider-mode-map (kbd "C-c RET") 'cider-insert-defun-in-repl)
-;;   (define-key cider-mode-map (kbd "C-c C-a") 'cider-format-defun)
-
-;;   (defun cider-save-and-eval-buffer ()
-;;     (interactive)
-;;     (save-buffer)
-;;     (cider-load-buffer-and-switch-to-repl-buffer))
-;;   (define-key cider-mode-map (kbd "C-c C-b") 'cider-save-and-eval-buffer)
-
-;;   (defun run-clojure()
-;;     (interactive)
-;;     (+popup-mode 0)
-;;     (delete-other-windows)
-;;     (setq w1 (selected-window))
-;;     (setq w1name (buffer-name))
-;;     (cider-jack-in-clj nil)
-;;     (set-window-buffer w1 w1name)
-;;     (run-with-timer 5.0 nil 'cider-repl-set-ns (cider-current-ns))))
-
-;; (defun clerk-show ()
-;;   (interactive)
-;;   (save-buffer)
-;;   (let
-;;       ((filename
-;;         (buffer-file-name)))
-;;     (when filename
-;;       (cider-interactive-eval
-;;        (concat "(nextjournal.clerk/show! \"" filename "\")")))))
-;; (define-key clojure-mode-map (kbd "<M-RET>") 'clerk-show) ;; RET in terminal vs. <return> in gui
-
-
-;; -------------------------------------------
-;; -- Clojure-lsp mode Configuration ---
-;; -------------------------------------------
-                                        ;
-;(setq lsp-ui-sideline-show-diagnostics nil) ; lsp-diagnostics can be a pain to have all of the time
-
-
-
-;; -------------------------------------------
-;; -- Hy Mode Configuration ---
-;; -------------------------------------------
-;(setq hy-shell--interpreter-args '("--spy"))
-;(setq hy-shell--interpreter-args '("--repl-output-fn" "hy.contrib.pprint.pformat"))
-
-;; Disable jedhy-mode and company-mode in inferior-hy-mode
-;; Alternatively, use vterm and execute hy to regain tabe-complete
-;; (setq hy-shell--interpreter-args
-;;       '("--repl-output-fn" "hy.contrib.hy-repr.hy-repr")
-;;       hy-jedhy--enable? nil)
-;; (add-hook 'hy-mode-hook (lambda () (company-mode)))
