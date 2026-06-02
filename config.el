@@ -231,15 +231,6 @@
 
 
 ;; -------------------------------------------
-;; -- scimax  functionality ---
-;; -------------------------------------------
-;; Added scimax babel functionality https://github.com/jkitchin/scimax
-;;(load! "scimax/scimax-ob.elc")
-(with-eval-after-load 'org
-  (load! "scimax/scimax-ob.elc"))
-
-
-;; -------------------------------------------
 ;; -- Bibtex  Mode Configuration ---
 ;; -------------------------------------------
 (setq bibtex-dialect 'biblatex)

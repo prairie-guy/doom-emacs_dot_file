@@ -65,8 +65,6 @@
 (package! nushell-mode :recipe (:host github :repo "mrkkrp/nushell-mode"))
 
 
-;; Required to use scimax-ob for improved orgmode babel
-(package! hydra)
 
 ;; Exporting docs
 ;;(package! ox-pandoc)
