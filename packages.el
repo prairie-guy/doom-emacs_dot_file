@@ -74,8 +74,6 @@
 ;; Quatro Markdown
 ;;(package! quarto-mode)
 
-;; Required for pubmed
-(package! pubmed)
 (package! citar)
 ;;(package! url)
 ;;(package! url-http)

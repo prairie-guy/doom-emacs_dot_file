@@ -272,36 +272,6 @@ ${author editor} (${year issued date}) ${title}, ${journal journaltitle publishe
   :no-require
   :config (citar-embark-mode))
 
-;;
-;; -------------------------------------------
-;; -- Pubmed  Mode Configuration ---
-;; -------------------------------------------
-;; git clone git@github.com:emacsmirror/pubmed.git
-;; https://github.com/emacsmirror/pubmed
-;; https://openaccessbutton.org/api
-;; https://dev.springernature.com/admin/applications
-
-;; (use-package pubmed
-;;   :ensure t
-;;   :commands (pubmed-search pubmed-advanced-search pubmed-unpaywall pubmed-dissemin pubmed-springer pubmed-scihub))
-(require 'pubmed)
-(require 'pubmed-advanced-search)
-(setq pubmed-api-key "772024ac885b3a0055c302ab295f41ce5c08")
-(setq pubmed-bibtex-keypattern "[pmid]")
-(setq pubmed-bibtex-default-file "/home/cdaniels/uofc/bibtex-lib/bibliography.bib")
-(setq pubmed-bibtex-article-note t) ; How to add extra fields to bibtex
-(setq pubmed-bibtex-article-pubmed t)
-(setq pubmed-openaccessbutton-api-key "2a98a191b95c9169eb5b1730235c3e")
-(setq pubmed-springer-api-key "f3bce4ebf5b2b8c1747cf735b3c30728")
-(setq pubmed-unpaywall-email "devnullmenot@gmail.com")
-(setq pubmed-scihub-url "https://sci-hub.se")
-(require 'pubmed-unpaywall)
-(require 'pubmed-dissemin)
-(require 'pubmed-springer)
-(require 'pubmed-scihub)
-(setq pubmed-fulltext-functions '(pubmed-pmc pubmed-openaccessbutton pubmed-unpaywall pubmed-dissemin pubmed-scihub))
-
-
 ;; (defun shell-region (start end)
 ;;   "execute region in an inferior shell"
 ;;   (interactive "r")
