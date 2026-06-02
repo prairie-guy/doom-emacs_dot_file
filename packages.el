@@ -61,6 +61,9 @@
 
 (package! snakemake-mode)
 
+;; Nushell
+(package! nushell-mode :recipe (:host github :repo "mrkkrp/nushell-mode"))
+
 
 ;; Required to use scimax-ob for improved orgmode babel
 (package! hydra)
@@ -80,8 +83,6 @@
 ;; (package! eww)
 ;; (package! json)
 ;; (package! s)
-
-
 
 ;;(package! ess)
 ;;(package! lsp-julia)
