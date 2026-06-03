@@ -53,6 +53,7 @@
 ;; To install SOME-PACKAGE from MELPA, ELPA or emacsmirror:
 ;; (package! esxml)
 ;; (package! unidecode)
+
 ;; Undo: use Doom's default undo-fu (via :emacs undo) + vundo for a visual tree.
 ;; (Replaced undo-tree, which littered *.~undo-tree~ files and had history bugs.)
 (package! vundo)

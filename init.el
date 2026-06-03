@@ -19,7 +19,8 @@
        ;;japanese
 
        :completion
-       company             ; the ultimate code completion backend
+       (corfu +orderless +dabbrev)  ; modern native completion (replaced deprecated company)
+                                    ; +icons omitted: terminal has no Nerd Font yet
        ;;helm              ; the *other* search engine for love and life
        ;;ido               ; the other *other* search engine...
        ;;ivy               ; a search engine for love and life

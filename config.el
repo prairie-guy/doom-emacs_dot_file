@@ -109,10 +109,20 @@
 (global-set-key (kbd "C-x b") 'ibuffer)
 
 ;; -----------------------------------------
-;; -- Global iPad Mouse/Trackpad Scrolling --
+;; -- Global iPad/Trackpad Scrolling --
 ;; -----------------------------------------
-(global-set-key (kbd "<mouse-5>") 'scroll-up-line)
-(global-set-key (kbd "<mouse-4>") 'scroll-down-line)
+;; Emacs 30 / blink.app report scroll as <wheel-up>/<wheel-down> (the old
+;; <mouse-4>/<mouse-5> no longer fire here). Bind both so trackpad scrolling
+;; works in blink AND on the shared Mac. A few lines per notch feels natural.
+(defun cbd/scroll-up-a-bit ()   (interactive) (scroll-up 3))
+(defun cbd/scroll-down-a-bit () (interactive) (scroll-down 3))
+(dolist (ev '("<wheel-down>" "<mouse-5>"))
+  (global-set-key (kbd ev) #'cbd/scroll-up-a-bit))
+(dolist (ev '("<wheel-up>" "<mouse-4>"))
+  (global-set-key (kbd ev) #'cbd/scroll-down-a-bit))
+;; Terminal Emacs only receives mouse/wheel events when xterm-mouse-mode is on.
+(unless (display-graphic-p)
+  (xterm-mouse-mode 1))
 
 ;; -----------------------------------------
 ;; -- Undo configuration --
@@ -123,10 +133,11 @@
 (map! "C-x u" #'vundo
       :leader :desc "Visual undo tree" "o u" #'vundo)
 
-;; In the vundo tree, use n/p for prev/next node (default is f/b); keep f/b too.
+;; In the vundo tree, n/p reversed per preference: n = backward (left/older),
+;; p = forward (right/newer). (Default f/b still work as the canonical directions.)
 (after! vundo
-  (define-key vundo-mode-map (kbd "n") #'vundo-forward)
-  (define-key vundo-mode-map (kbd "p") #'vundo-backward))
+  (define-key vundo-mode-map (kbd "n") #'vundo-backward)
+  (define-key vundo-mode-map (kbd "p") #'vundo-forward))
 
 ;; ---------------------------
 ;; -- smartparens configuration --
@@ -156,15 +167,25 @@
 
 
 ;; ---------------------------
-;; -- company configuration --
+;; -- corfu completion configuration --
 ;; ---------------------------
-(global-company-mode)
-(after! company (add-to-list 'company-backends 'company-files)) ;; open filenames
-(global-set-key (kbd "C-c f c") 'company-files) ;; Acticate company filename search
-(define-key company-active-map (kbd "\C-n") 'company-select-next)
-(define-key company-active-map (kbd "\C-p") 'company-select-previous)
-(define-key company-active-map (kbd "\C-d") 'company-show-doc-buffer)
-(define-key company-active-map (kbd "\C-d") 'company-show-doc-buffer)
+;; Migrated from company (now deprecated in Doom). The :completion corfu module
+;; turns corfu on globally, auto-enables corfu-terminal (because :os tty is set),
+;; auto-adds cape-file to completion, and already enables corfu-popupinfo-mode.
+;; So we only re-add the two custom company keybindings we were used to:
+(after! corfu
+  ;; C-n/C-p already select next/prev by default. C-d: toggle the docs popup
+  ;; (was company-show-doc-buffer).
+  (define-key corfu-map (kbd "C-d") #'corfu-popupinfo-toggle))
+
+;; File-path completion is already automatic via cape-file, but keep the explicit
+;; C-c f c key (was company-files) for muscle memory.
+(defun cbd/complete-file ()
+  "Complete a file path at point via cape-file."
+  (interactive)
+  (let ((completion-at-point-functions (list #'cape-file)))
+    (completion-at-point)))
+(global-set-key (kbd "C-c f c") #'cbd/complete-file)
 
 ;; -------------------------------------------
 ;; -- Org Mode Configuration ---
@@ -213,6 +234,22 @@
 ;; -------------------------------------------
 ;; Add markdown-mode for files with .qmd extension
 (add-to-list 'auto-mode-alist '("\\.qmd\\'" . markdown-mode))
+
+;; Keep markdown plain and normal: raw markup is VISIBLE while editing (like a
+;; normal text file). The only tweak is native syntax-highlighting of fenced
+;; code blocks. No forced markup-hiding, no surprises.
+(after! markdown-mode
+  (setq markdown-fontify-code-blocks-natively t))
+
+;; When you want a clean READING view, run M-x markdown-toggle-view: it switches
+;; to the read-only `markdown-view-mode' (markup hidden); run it again to return
+;; to editing. Toggles correctly from either state.
+(defun markdown-toggle-view ()
+  "Toggle between `markdown-mode' (edit) and `markdown-view-mode' (read-only)."
+  (interactive)
+  (cond ((eq major-mode 'markdown-view-mode) (markdown-mode))
+        ((eq major-mode 'markdown-mode)      (markdown-view-mode))
+        (t (user-error "Not in a Markdown buffer (mode is %s)" major-mode))))
 
 
 
