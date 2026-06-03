@@ -108,6 +108,11 @@
 ;;
 (global-set-key (kbd "C-x b") 'ibuffer)
 
+;; `C-x o' normally CYCLES windows, which is awkward with 3+ windows (e.g. treemacs
+;; + code + vterm) -- hard to land on the one you want, like getting back into vterm.
+;; ace-window labels each window with a letter so you jump DIRECTLY to it.
+(global-set-key (kbd "C-x o") #'ace-window)
+
 ;; -----------------------------------------
 ;; -- Global iPad/Trackpad Scrolling --
 ;; -----------------------------------------
