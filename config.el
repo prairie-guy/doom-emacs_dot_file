@@ -28,7 +28,7 @@
 ;;(setq doom-theme 'doom-one)
 ;;(setq doom-theme 'doom-horizon)
 ;;(setq doom-theme 'doom-monokai-pro)
-(setq doom-theme 'doom-sourcerer)
+(setq doom-theme 'doom-one)
 
 ;; If you use `org' and don't want your org files in the default location below,
 ;; change `org-directory'. It must be set before org loads!
@@ -125,6 +125,43 @@
   (xterm-mouse-mode 1))
 
 ;; -----------------------------------------
+;; -- Modern UI niceties (terminal-safe) --
+;; -----------------------------------------
+;; Smoother scrolling: keep the cursor a few lines off the screen edges.
+(setq scroll-margin 4
+      scroll-conservatively 101)
+
+;; hl-line is on (global-hl-line-mode), but in a 256-color terminal doom-one's
+;; hl-line bg collapses to plain black == the default bg, so the current line is
+;; invisible. Force a visibly-distinct background for the current line in -nw.
+;;
+;; Also: in completion popups the MATCHED letters were colored 'lightblue'
+;; (completions-common-part), which is hard to read. Make matched text readable
+;; -- bold + a high-contrast yellow, no masking -- and same for orderless groups.
+;; KEY: doom-one gives these match faces a BACKGROUND (e.g. blue #51afef) that
+;; masks the letters. Clear the background (:background unspecified) so matched
+;; text is just bold + a readable color on the normal bg -- the "transparent" look.
+(custom-set-faces!
+  '(hl-line :background "color-236")     ; dark grey, distinct from black
+  '(completions-common-part   :foreground "brightyellow"  :background unspecified :weight bold)
+  '(completions-first-difference :foreground "brightred"  :background unspecified :weight bold)
+  '(orderless-match-face-0  :foreground "brightyellow"  :background unspecified :weight bold)
+  '(orderless-match-face-1  :foreground "brightcyan"    :background unspecified :weight bold)
+  '(orderless-match-face-2  :foreground "brightgreen"   :background unspecified :weight bold)
+  '(orderless-match-face-3  :foreground "brightmagenta" :background unspecified :weight bold))
+
+;; Rainbow-colored nested delimiters in code buffers.
+(add-hook 'prog-mode-hook #'rainbow-delimiters-mode)
+
+;; File-type icons in dired (needs a Nerd Font in the terminal -- blink has one).
+(add-hook 'dired-mode-hook #'nerd-icons-dired-mode)
+
+;; Symbol-kind icons in the corfu completion popup.
+(after! corfu
+  (when (require 'nerd-icons-corfu nil t)
+    (add-to-list 'corfu-margin-formatters #'nerd-icons-corfu-formatter)))
+
+;; -----------------------------------------
 ;; -- Undo configuration --
 ;; -----------------------------------------
 ;; Doom's :emacs undo module provides undo-fu + persistent undo-fu-session.
@@ -133,11 +170,14 @@
 (map! "C-x u" #'vundo
       :leader :desc "Visual undo tree" "o u" #'vundo)
 
-;; In the vundo tree, n/p reversed per preference: n = backward (left/older),
-;; p = forward (right/newer). (Default f/b still work as the canonical directions.)
+;; In the vundo tree: n/p reversed per preference (n = backward/left/older,
+;; p = forward/right/newer; default f/b still work), and C-a/C-e jump to the
+;; very front (oldest) / back (newest) of the undo chain, like line start/end.
 (after! vundo
   (define-key vundo-mode-map (kbd "n") #'vundo-backward)
-  (define-key vundo-mode-map (kbd "p") #'vundo-forward))
+  (define-key vundo-mode-map (kbd "p") #'vundo-forward)
+  (define-key vundo-mode-map (kbd "C-a") #'vundo-stem-root)   ; oldest state
+  (define-key vundo-mode-map (kbd "C-e") #'vundo-stem-end))   ; newest state
 
 ;; ---------------------------
 ;; -- smartparens configuration --

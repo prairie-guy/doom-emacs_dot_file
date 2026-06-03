@@ -61,6 +61,11 @@
 ;; NOTE: org-modern + org-appear are ALREADY provided by Doom's (org +pretty)
 ;; flag in init.el -- no (package! org-modern) needed. Removed abandoned org-bullets.
 
+;; Modern feel (terminal-safe; icons need a Nerd Font in the terminal, which blink has).
+(package! nerd-icons-dired)   ; file-type icons in dired
+(package! nerd-icons-corfu)   ; symbol-kind icons in the completion popup
+(package! rainbow-delimiters) ; color-code nested parens/brackets by depth
+
 (package! julia-mode)
 (package! julia-repl)
 (package! julia-snail)
