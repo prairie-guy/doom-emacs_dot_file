@@ -66,9 +66,8 @@
 (package! nerd-icons-corfu)   ; symbol-kind icons in the completion popup
 (package! rainbow-delimiters) ; color-code nested parens/brackets by depth
 
-(package! julia-mode)
-(package! julia-repl)
-(package! julia-snail)
+;; julia-mode + julia-repl + julia-snail now come from Doom's (julia +snail)
+;; module in init.el -- no manual (package!) decls needed.
 
 (package! snakemake-mode)
 

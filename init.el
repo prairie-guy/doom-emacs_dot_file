@@ -139,8 +139,7 @@
        json              ; At least it ain't XML
        ;;(java +meghanada) ; the poster child for carpal tunnel syndrome
        ;;javascript        ; all(hope(abandon(ye(who(enter(here))))))
-       ;;(julia +lsp)
-       ;;julia             ; a better, faster MATLAB (CBD: Not configured here. Edited: .config.el, packages.el)
+       (julia +snail)    ; a better, faster MATLAB (julia-mode + julia-snail REPL)
        ;;kotlin            ; a better, slicker Java(Script)
        latex             ; writing papers in Emacs has never been so fun
        ;;lean

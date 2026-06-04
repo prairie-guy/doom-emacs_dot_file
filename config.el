@@ -356,31 +356,31 @@ ${author editor} (${year issued date}) ${title}, ${journal journaltitle publishe
 
 
 ;; -------------------------------------------
-;; -- Julia Snail Mode Configuration ---
+;; -- Julia (julia-snail) personal tweaks ---
 ;; -------------------------------------------
-;; julia not uncommented in .doom.d/init.el
-;; julia, julia-repl julia-snail package added
-;;
+;; julia-mode + julia-snail now come from Doom's (julia +snail) module, which
+;; loads/hooks snail for us. We only add personal commands + keybindings here,
+;; wrapped in `after!' since julia-snail-mode-map now loads lazily.
 
 (set-language-environment "UTF-8")
-;;(add-to-list 'load-path "/path/to/julia-snail")
-(require 'julia-snail)
-(add-hook 'julia-mode-hook #'julia-snail-mode)
 
-(defun julia-snail-save-and-send-buffer-file ()
-  (interactive)
-  (save-buffer)
-  (julia-snail-send-buffer-file)
-  (julia-snail))
+(after! julia-snail
+  (defun julia-snail-save-and-send-buffer-file ()
+    "Save the buffer, send the file to the Julia REPL, then show the REPL."
+    (interactive)
+    (save-buffer)
+    (julia-snail-send-buffer-file)
+    (julia-snail))
 
-; Save before sending over buffer
-(define-key julia-snail-mode-map  (kbd "C-c C-b") #'julia-snail-save-and-send-buffer-file)
+  (defun julia-|> ()
+    "Insert '|>' for use with Julia transducers/pipes."
+    (interactive) (insert "|>"))
 
-(defun julia-|> ()
-  "Insert '|> for use with Julia Tranducers"
-  (interactive) (insert "|>"))
-(define-key julia-snail-mode-map  (kbd "C-c .") 'julia-|> )
+  ;; Personal bindings (kept from before): C-c C-b = save+send+show REPL.
+  (define-key julia-snail-mode-map (kbd "C-c C-b") #'julia-snail-save-and-send-buffer-file)
+  (define-key julia-snail-mode-map (kbd "C-c .")   #'julia-|>)
 
-(add-to-list 'display-buffer-alist
-             '("\\*julia" (display-buffer-reuse-window display-buffer-same-window)))
+  ;; Reuse the same window for the *julia* REPL buffer.
+  (add-to-list 'display-buffer-alist
+               '("\\*julia" (display-buffer-reuse-window display-buffer-same-window))))
 
