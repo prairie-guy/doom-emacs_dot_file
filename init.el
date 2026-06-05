@@ -109,7 +109,7 @@
        ;;upload            ; map local to remote projects via ssh/ftp
 
        :os
-       tty               ; improve the terminal Emacs experience
+       (tty +osc)        ; improve the terminal Emacs experience (+osc: clipetty/OSC-52 → system clipboard over mosh/ssh)
        macos             ; MacOS-specific commands (kept: config is shared w/ a Mac; inert on Linux)
 
        :lang
