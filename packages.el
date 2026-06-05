@@ -71,6 +71,12 @@
 
 (package! snakemake-mode)
 
+;; Claude Code in Emacs: runs the Claude Code CLI in a vterm buffer with
+;; send-region/file/error from your buffers. Reuses your existing CC OAuth
+;; (no API key). transient + vterm already provided by Doom.
+(package! claude-code :recipe (:host github :repo "stevemolitor/claude-code.el"))
+(package! inheritenv :recipe (:host github :repo "purcell/inheritenv"))
+
 ;; Nushell
 (package! nushell-mode :recipe (:host github :repo "mrkkrp/nushell-mode"))
 

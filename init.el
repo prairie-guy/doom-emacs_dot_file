@@ -96,7 +96,7 @@
        (eval +overlay)     ; run code, run (also, repls)
        ;;gist              ; interacting with github gists
        lookup              ; navigate your code and its documentation
-       ;;lsp
+       ;;lsp             ; (was (lsp +eglot) for Python -- removed; caused thrashing)
        magit             ; a git porcelain for Emacs
        ;;make              ; run make tasks from Emacs
        ;;pass              ; password manager for nerds
@@ -138,7 +138,7 @@
        ;;idris             ;
        json              ; At least it ain't XML
        ;;(java +meghanada) ; the poster child for carpal tunnel syndrome
-       ;;javascript        ; all(hope(abandon(ye(who(enter(here))))))
+       javascript        ; JS + TypeScript (.ts/.tsx) -- highlighting + light edit, no LSP
        (julia +snail)    ; a better, faster MATLAB (julia-mode + julia-snail REPL)
        ;;kotlin            ; a better, slicker Java(Script)
        latex             ; writing papers in Emacs has never been so fun
@@ -154,8 +154,7 @@
        ;;php               ; perl's insecure younger brother
        ;;plantuml   yy       ; diagrams for confusing people more
        ;;purescript        ; javascript, but functional
-       python
-       ;;(python +lsp); Trying out 'lsp' rather than elpy
+       python            ; plain Python: highlighting + REPL (C-c C-b). No LSP.
        ;;qt                ; the 'cutest' gui framework ever
        ;;racket            ; a DSL for DSLs
        ;;raku              ; the artist formerly known as perl6

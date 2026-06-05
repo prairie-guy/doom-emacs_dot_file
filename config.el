@@ -166,6 +166,11 @@
   (when (require 'nerd-icons-corfu nil t)
     (add-to-list 'corfu-margin-formatters #'nerd-icons-corfu-formatter)))
 
+;; File-path completion is available ON DEMAND in any buffer via C-c f c
+;; (cbd/complete-file, defined in the Python/completion section). Not made global
+;; on purpose -- automatic cape-file in prose buffers pops unwanted suggestions
+;; on dates/fractions/paths-in-text. Use C-M-i for normal complete-at-point.
+
 ;; -----------------------------------------
 ;; -- Undo configuration --
 ;; -----------------------------------------
@@ -354,6 +359,11 @@ ${author editor} (${year issued date}) ${title}, ${journal journaltitle publishe
   (smartparens-strict-mode -1))
 (add-hook 'inferior-python-mode-hook #'disable-smartparens-strict-mode)
 
+;; (Python LSP removed -- eglot+basedpyright thrashed when scanning large non-
+;; project dirs like ~/junk. Plain python module: highlighting + REPL. File-path
+;; completion (C-M-i / C-c f c) and word completion are unaffected -- they come
+;; from corfu/cape, not LSP.)
+
 
 ;; -------------------------------------------
 ;; -- Julia (julia-snail) personal tweaks ---
@@ -383,4 +393,37 @@ ${author editor} (${year issued date}) ${title}, ${journal journaltitle publishe
   ;; Reuse the same window for the *julia* REPL buffer.
   (add-to-list 'display-buffer-alist
                '("\\*julia" (display-buffer-reuse-window display-buffer-same-window))))
+
+
+;; -------------------------------------------
+;; -- Claude Code in Emacs --
+;; -------------------------------------------
+;; Runs the Claude Code CLI in a vterm buffer. Reuses your existing Claude Code
+;; OAuth (no API key). Lazy -- package loads on first use.
+;;   C-c k  -> opens the Claude Code COMMAND PALETTE (transient menu). From it,
+;;             press the listed letter: c=start, s=send region, f=send file,
+;;             t=toggle window, etc. This is the menu-first workflow.
+;; (C-c k chosen because C-c c=compile and C-c a=embark-act are taken.)
+;; C-c k is bound below (cbd/claude-code-palette) to show the palette at the
+;; bottom of the frame.
+(use-package! claude-code
+  :defer t
+  :config
+  (setq claude-code-terminal-backend 'vterm)
+  (claude-code-mode))
+
+;; Show ONLY the claude-code palette pinned to the bottom of the frame (like the
+;; SPC leader / which-key), without changing the global transient position (which
+;; Doom/magit set to below-the-window). Scoped via a let-bound display action
+;; around just this command -- leaves magit and other transients untouched.
+(defun cbd/claude-code-palette ()
+  "Open the claude-code transient palette at the bottom of the frame."
+  (interactive)
+  (let ((transient-display-buffer-action
+         '(display-buffer-in-side-window
+           (side . bottom)
+           (dedicated . t)
+           (inhibit-same-window . t))))
+    (call-interactively #'claude-code-transient)))
+(global-set-key (kbd "C-c k") #'cbd/claude-code-palette)
 
