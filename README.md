@@ -25,33 +25,44 @@ My personal doom-emacs configuration, tuned for my needs. It is customized from 
 * apt-get install make cmake
 * apt-get install xclip
 
-### Edit ~/.bashrc
-* `export PATH="~/.emacs.d/bin:$PATH"`
+### Locations (doom v3 / XDG -- these changed from the old ~/.emacs.d layout):
+* `~/.config/emacs/` - doom itself. Don't change anything here.
+* `~/.config/doom/`  - this repository. All configuration goes here.
+* Doom still falls back to the legacy `~/.emacs.d` and `~/.doom.d` if they exist.
+  Do not leave a stray `~/.emacs.d` lying around: emacs prefers it over
+  `~/.config/emacs`, and doom will silently not load at all.
 
-### Clone ~/.doom.d (This repository)
+### Edit ~/.bashrc
+* `export PATH="$HOME/.config/emacs/bin:$PATH"`
+
+### Clone ~/.config/doom (This repository)
 * Do this before installing doom-emacs.
-* `git clone git@github.com:prairie-guy/doom-emacs_dot_file.git .doom.d`
+* `git clone git@github.com:prairie-guy/doom-emacs_dot_file.git ~/.config/doom`
 * Remember to use ssh-address to clone this repository. That allows `git push` authentication through ssh-key.
 
 ### Install doom:
-* git clone --depth 1 https://github.com/doomemacs/doomemacs ~/.emacs.d
-* ~/.emacs.d/bin/doom install (doom install)
+* git clone --depth 1 https://github.com/doomemacs/core ~/.config/emacs
+* ~/.config/emacs/bin/doom install (doom install)
 * doom sync
 
-### doom binaries are located in ~/.emacs.d  # Don't change anything here:
+### doom binaries are located in ~/.config/emacs/bin:
 * doom sync  
 * doom doctor 
 
-### Configuration is done in ~/.doom.d/
+### Configuration is done in ~/.config/doom/
 * init.el - General parameter selections. Select options. No additions.
 * package.el  - Add additional packages here. Don't use melpa or add package management.
 * config.el - This is where personal customization should take place
 
 ### doom documentation:
-* https://github.com/hlissner/doom-emacs/blob/develop/docs/getting_started.org
-* https://github.com/hlissner/doom-emacs/blob/develop/docs/index.org
-* https://github.com/hlissner/doom-emacs/blob/develop/modules/editor/evil/README.org to unplug evil
-* https://github.com/hlissner/doom-emacs/blob/develop/modules/config/default/+emacs-bindings.el for emacs only bindings
+* https://github.com/doomemacs/core/blob/master/docs/getting_started.org
+* https://github.com/doomemacs/core/blob/master/docs/faq.org
+* Caveat: upstream `getting_started.org` is stale and still documents the old
+  `~/.emacs.d` layout. The doom `README.md` is the current source of truth.
+* Modules now live in their own repo (https://github.com/doomemacs/modules),
+  checked out locally under `~/.config/emacs/sources/doom+/modules/`:
+  * `.../modules/editor/evil/README.org` to unplug evil
+  * `.../modules/config/default/+emacs-bindings.el` for emacs only bindings
 
 
 
