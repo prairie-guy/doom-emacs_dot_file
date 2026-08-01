@@ -20,10 +20,20 @@ My personal doom-emacs configuration, tuned for my needs. It is customized from 
 * Linux: apt-get install fd-find
 * OSx : brew install coreutils fd
 
-### Other system sequirements (vterm, make, cmake, xclip)
-* apt-get install libvterm-dev
-* apt-get install make cmake
+### Other system requirements (vterm, make, cmake, xclip)
+* apt-get install libvterm-dev pkg-config
+* apt-get install make cmake libtool-bin
 * apt-get install xclip
+* vterm notes (all three of these are needed, or the module fails to build):
+  * Without `libvterm-dev`, cmake downloads and compiles a bundled libvterm,
+    which drags in the autotools path and fails on missing libtool.
+  * `pkg-config` is how cmake detects the system libvterm. Missing it sends
+    you down the bundled path even with libvterm-dev installed.
+  * The `libtool` package does NOT ship the `libtool` binary on debian/ubuntu
+    -- that is `libtool-bin`. Installing `libtool` alone gets you `libtoolize`
+    and nothing else, and cmake fails with "libtool not found".
+* If a vterm build has already failed, delete the stale cmake cache first:
+  `rm -rf ~/.config/emacs/.local/straight/build-*/vterm/build`, then M-x vterm.
 
 ### Locations (doom v3 / XDG -- these changed from the old ~/.emacs.d layout):
 * `~/.config/emacs/` - doom itself. Don't change anything here.
