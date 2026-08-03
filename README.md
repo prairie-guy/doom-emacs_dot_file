@@ -6,9 +6,70 @@ based on the configuration I had in: https://github.com/prairie-guy/emacs_dotfil
 
 ---
 
-## Install (Ubuntu 24.04, headless server)
+## Automated install
 
-This is the path that actually works. Run the steps in order.
+`setup.sh` performs the whole install below in one step. It is written to be
+called as a module from a parent provisioning script (`setup-linux-server.sh`),
+or run on its own.
+
+```
+git clone git@github.com:prairie-guy/doom-emacs_dot_file.git ~/.config/doom
+~/.config/doom/setup.sh
+```
+
+Or fully unattended from a parent script, which may clone this repo first or
+let `setup.sh` do it:
+
+```
+# in setup-linux-server.sh
+~/.config/doom/setup.sh
+```
+
+It needs `sudo` for the apt step only; everything else is per-user. If you are
+not root it will invoke `sudo` itself, so run it as your normal user, not under
+`sudo`.
+
+**It is idempotent.** Re-running is safe: apt packages are checked with
+`dpkg-query` before installing, clones are skipped if the directory is already
+a git repo, the `~/.bashrc` PATH export is matched on the `.config/emacs/bin`
+fragment (so a hand-written export already in your bashrc counts and nothing is
+appended twice), and once doom is installed it runs `doom sync` rather than
+`doom install`.
+
+Preview what it would do without touching anything:
+
+```
+~/.config/doom/setup.sh --check
+```
+
+Behavior can be overridden by environment variable:
+
+| variable | default | purpose |
+|---|---|---|
+| `EMACS_PKG` | `emacs-nox` | apt package for emacs |
+| `DOOMDIR` | `~/.config/doom` | config location |
+| `EMACSDIR` | `~/.config/emacs` | doom core location |
+| `CONFIG_REPO` | `git@github.com:prairie-guy/...` | this repo's clone URL |
+| `SKIP_APT` | `0` | set to `1` to let the parent script own all apt installs |
+
+Two behaviors worth knowing:
+
+* **An existing `emacs` on `PATH` is left alone.** If you already have one --
+  a source build, or something deliberately shadowing the distro package --
+  the script will not install `emacs-nox` over it.
+* **It aborts if `~/.emacs.d` exists**, because emacs prefers that path over
+  `~/.config/emacs` and doom would silently not load at all. Move it aside and
+  re-run.
+
+The clone prefers the ssh remote so `git push` authenticates through your ssh
+key. On a fresh box with no key registered with GitHub it falls back to https
+and tells you how to switch the remote back.
+
+---
+
+## Manual install (Ubuntu 24.04, headless server)
+
+What `setup.sh` automates, in order.
 
 ### 1. Emacs
 
@@ -17,19 +78,8 @@ sudo apt install emacs-nox
 ```
 
 Ubuntu 24.04 ships Emacs 29.3, which is new enough for doom. `emacs-nox` is the
-terminal-only build -- correct for a headless box reached over ssh/mosh.
-
-Two things NOT to bother with (both were tried and abandoned):
-
-* **`ppa:kelleyk/emacs`** -- was added, then removed. The distro package is
-  fine and the PPA is an extra moving part. If you do want it back:
-  `sudo add-apt-repository ppa:kelleyk/emacs && sudo apt install emacs30`.
-* **Building 30.2 from source** -- see the appendix at the bottom. It took four
-  attempts to get `./configure` through, and the result was never used. Only go
-  down this road if you specifically need native-comp or tree-sitter.
-
-For a GUI desktop instead of a server, use `sudo apt install emacs30` (with the
-PPA above), or on OSX:
+terminal-only build -- correct for a headless box reached over ssh/mosh. For a
+GUI desktop use `emacs30` instead, or on OSX:
 
 ```
 brew tap d12frosted/emacs-plus
@@ -39,14 +89,13 @@ ln -s /usr/local/opt/emacs-plus/Emacs.app /Applications/Emacs.app
 
 ### 2. System packages
 
-Everything doom needs, in one line:
-
 ```
 sudo apt install git ripgrep fd-find libvterm-dev pkg-config make cmake libtool-bin
 ```
 
 * `ripgrep` -- faster grep (https://github.com/BurntSushi/ripgrep)
-* `fd-find` -- faster find (https://github.com/sharkdp/fd)
+* `fd-find` -- faster find (https://github.com/sharkdp/fd). Debian/Ubuntu
+  install this as `fdfind`, not `fd`; doom checks for both names.
 * the rest are the vterm build chain; see the vterm notes below
 
 No `xclip` on a headless box. Clipboard goes through OSC-52 instead -- the
@@ -101,6 +150,7 @@ old location no longer exists in doom v3.
 * `init.el` - General parameter selections. Select options. No additions.
 * `packages.el` - Add additional packages here. Don't use melpa or add package management.
 * `config.el` - This is where personal customization should take place.
+* `setup.sh` - Automated installer, above.
 
 ## doom binaries are in `~/.config/emacs/bin`
 
@@ -139,36 +189,3 @@ rm -rf ~/.config/emacs/.local/straight/build-*/vterm/build
   checked out locally under `~/.config/emacs/sources/doom+/modules/`:
   * `.../modules/editor/evil/README.org` to unplug evil
   * `.../modules/config/default/+emacs-bindings.el` for emacs only bindings
-
----
-
-## Appendix: building Emacs from source (not currently used)
-
-Kept for reference. The distro `emacs-nox` is what is actually installed. If you
-need native compilation or tree-sitter, this is the headless configure that
-finally got through -- note there is no X, no GUI toolkit, and no image
-libraries, which is what removes most of the dependency pain:
-
-```
-sudo apt install -y build-essential zlib1g-dev libgccjit-13-dev \
-    libtree-sitter-dev libgnutls28-dev libxml2-dev libjansson-dev \
-    libncurses-dev libacl1-dev texinfo wget
-
-cd /tmp
-wget https://ftp.gnu.org/gnu/emacs/emacs-30.2.tar.xz
-tar xf emacs-30.2.tar.xz
-cd emacs-30.2
-
-./configure --with-native-compilation=aot --with-tree-sitter --with-json \
-            --with-mailutils --with-modules \
-            --without-x --without-xpm --without-jpeg --without-png \
-            --without-gif --without-tiff --without-webp --without-rsvg \
-            --without-imagemagick --without-gpm --without-dbus
-
-make -j$(nproc)
-sudo make install     # installs to /usr/local
-```
-
-`make -j$(nproc)` with `aot` takes 10-20 minutes. If a previous configure
-failed, run `make distclean` first. Remember that `/usr/local/bin` must precede
-`/usr/bin` on your PATH for the source build to win over the distro package.
