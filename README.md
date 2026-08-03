@@ -42,8 +42,8 @@ Preview what it would do without touching anything:
 ~/.config/doom/setup.sh --check
 ```
 
-Pick a configuration profile for the machine with `--config` (see
-[Configuration profiles](#configuration-profiles) below):
+Install a different configuration or package set with `--config` / `--packages`
+(see [Configuration](#configuration) below):
 
 ```
 ~/.config/doom/setup.sh --config base-config.el
@@ -152,41 +152,40 @@ old location no longer exists in doom v3.
   Do not leave a stray `~/.emacs.d` lying around: emacs prefers it over
   `~/.config/emacs`, and doom will silently not load at all.
 
-## Configuration is done in `~/.config/doom/`
+## Configuration
 
-* `init.el` - General parameter selections. Select options. No additions.
-* `packages.el` - Add additional packages here. Don't use melpa or add package management.
-* `config.el` - Thin profile selector only; the real config is in the profiles below.
+* `init.el` - Doom modules. Select options, no additions. Needs `doom sync`.
+* `packages.el` - Extra packages via `(package! ...)`. Needs `doom sync`.
+* `config.el` - The configuration doom loads. Edit freely; no sync needed.
+* `base-config.el` - Portable editor core, loaded by `config.el`.
 * `setup.sh` - Automated installer, above.
 
-## Configuration profiles
+`config.el` layers the day-to-day language tooling -- corfu tweaks, python,
+julia -- on top of `base-config.el`, which holds the portable editor core:
+keybindings, terminal scrolling, UI, undo, smartparens, org and markdown.
+Nothing is duplicated between them.
 
-Not every machine wants the whole configuration. A headless build server does
-not need the julia REPL or a bibliography manager. So the config is split into
-three **strictly nested** profiles -- each loads the one below it, so no code is
-duplicated:
-
-| profile | contains | needs |
-|---|---|---|
-| `base-config.el` | keybindings, terminal scrolling, UI, undo, smartparens, org, markdown | nothing beyond `setup.sh` |
-| `typical-config.el` | base + corfu tweaks, python, julia, claude-code | python; julia and claude optional (both lazy) |
-| `full-config.el` | typical + bibtex/citar | the `~/uofc/Articles/` library |
-
-`typical-config.el` is the default. Select another with:
+For a leaner install -- the editor core alone, no language tooling --
+`base-config.el` is self-contained and can be used on its own:
 
 ```
 ./setup.sh --config base-config.el
 ```
 
-That writes the profile name to `.doom-config`, which `config.el` reads at
-startup. It is gitignored, so a machine's choice never shows up as a modified
-`config.el` in `git status`. If the marker is missing, empty, or names a file
-that isn't there, `config.el` falls back to `typical-config.el` rather than
-failing to load any configuration.
+Doom hardcodes the names `config.el` and `packages.el`, so `--config` and
+`--packages` install the named file **as** that name. The defaults are
+`config.el` and `packages.el`, which copy nothing and use the repo as-is.
 
-To switch profiles by hand, just edit `.doom-config` (or delete it to get the
-default) and restart Emacs. No `doom sync` needed -- that is only for `init.el`
-and `packages.el`.
+Two consequences worth knowing:
+
+* Replacing `config.el` makes it show as modified in `git status`, since it is
+  a tracked file. `setup.sh` warns when it does this, and refuses outright if
+  the destination already has uncommitted changes.
+* `--packages` changes what gets built, so it requires a `doom sync`. `setup.sh`
+  runs one for you.
+
+Beyond that, just edit `config.el` and `packages.el` directly -- they are meant
+to be adjusted.
 
 ## doom binaries are in `~/.config/emacs/bin`
 

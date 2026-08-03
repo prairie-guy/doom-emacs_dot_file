@@ -8,13 +8,17 @@
 #
 # Requires sudo for the apt step only. Everything else is per-user.
 #
-#   ./setup.sh                            # install, typical-config.el profile
-#   ./setup.sh --config base-config.el    # install with a specific profile
-#   ./setup.sh --check                    # report what would change, touch nothing
+#   ./setup.sh                              # install with the defaults
+#   ./setup.sh --config base-config.el      # install a different config
+#   ./setup.sh --packages my-packages.el    # ...and/or a different package set
+#   ./setup.sh --check                      # report what would change, touch nothing
 #
-# Profiles (see config.el): base-config.el is the portable editor core,
-# typical-config.el adds python/julia/claude-code (the default), and
-# full-config.el adds the bibtex/citar stack.
+# Doom always loads config.el and packages.el, so --config/--packages install
+# the named file AS that name. Defaults are config.el and packages.el, i.e.
+# use what is already in the repo and copy nothing.
+#
+# Shipped alternative: base-config.el, the portable editor core with no
+# language tooling. Edit config.el/packages.el directly to adjust anything.
 #
 # Overridable via environment:
 #   EMACS_PKG     apt package for emacs        (default: emacs-nox)
@@ -55,15 +59,19 @@ APT_PACKAGES=(
 #   julia       -- install via juliaup, not apt; apt's version lags badly
 #   claude CLI  -- curl -fsSL https://claude.ai/install.sh | bash
 
-CONFIG_PROFILE=""
+CONFIG_SRC="config.el"
+PACKAGES_SRC="packages.el"
 
 while (( $# )); do
   case "$1" in
     --check)  CHECK_ONLY=1; shift ;;
     --config) [[ -n "${2:-}" ]] || { printf 'xx --config needs a filename\n' >&2; exit 1; }
-              CONFIG_PROFILE="$2"; shift 2 ;;
-    --config=*) CONFIG_PROFILE="${1#*=}"; shift ;;
-    -h|--help) sed -n '2,20p' "$0" | sed 's/^# \?//'; exit 0 ;;
+              CONFIG_SRC="$2"; shift 2 ;;
+    --config=*)   CONFIG_SRC="${1#*=}"; shift ;;
+    --packages) [[ -n "${2:-}" ]] || { printf 'xx --packages needs a filename\n' >&2; exit 1; }
+              PACKAGES_SRC="$2"; shift 2 ;;
+    --packages=*) PACKAGES_SRC="${1#*=}"; shift ;;
+    -h|--help) sed -n '2,24p' "$0" | sed 's/^# \?//'; exit 0 ;;
     *) printf 'xx unknown argument: %s (try --help)\n' "$1" >&2; exit 1 ;;
   esac
 done
@@ -174,25 +182,33 @@ else
   fi
 fi
 
-# -------------------------------------------------------------- config profile --
+# ------------------------------------------------------- config / packages --
 
-# config.el reads this marker to decide which *-config.el to load. Only written
-# when --config is passed; absent, config.el falls back to typical-config.
-if [[ -n "$CONFIG_PROFILE" ]]; then
-  if [[ ! -e "$DOOMDIR/$CONFIG_PROFILE" ]] && (( ! CHECK_ONLY )); then
-    die "no such profile: $DOOMDIR/$CONFIG_PROFILE"
+# Doom hardcodes the names config.el and packages.el, so selecting a different
+# one means installing it under that name. A source equal to the destination is
+# the default and copies nothing.
+install_as() {
+  local src="$1" dst="$2"
+  if [[ "$src" == "$dst" ]]; then
+    skip "using $dst as-is"
+    return
   fi
-  log "selecting config profile: $CONFIG_PROFILE"
-  if (( CHECK_ONLY )); then
-    printf '    \033[2m[would write]\033[0m %s -> %s\n' "$CONFIG_PROFILE" "$DOOMDIR/.doom-config"
-  else
-    printf '%s\n' "$CONFIG_PROFILE" >"$DOOMDIR/.doom-config"
+  [[ -e "$DOOMDIR/$src" ]] || die "no such file: $DOOMDIR/$src"
+
+  # $dst is tracked, so overwriting it makes the repo dirty. Refuse to discard
+  # edits the user has not committed.
+  if git -C "$DOOMDIR" rev-parse --git-dir >/dev/null 2>&1 \
+     && ! git -C "$DOOMDIR" diff --quiet -- "$dst" 2>/dev/null; then
+    die "$dst has uncommitted changes; commit or stash them before replacing it"
   fi
-elif [[ -f "$DOOMDIR/.doom-config" ]]; then
-  skip "config profile already set to $(<"$DOOMDIR/.doom-config")"
-else
-  skip "no --config given, config.el will use typical-config.el"
-fi
+
+  log "installing $src as $dst"
+  warn "$dst is tracked; it will show as modified in git status"
+  run cp "$DOOMDIR/$src" "$DOOMDIR/$dst"
+}
+
+install_as "$CONFIG_SRC"   "config.el"
+install_as "$PACKAGES_SRC" "packages.el"
 
 # ------------------------------------------------------------------ doom core --
 

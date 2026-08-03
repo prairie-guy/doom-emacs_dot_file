@@ -69,17 +69,11 @@
 ;; julia-mode + julia-repl + julia-snail now come from Doom's (julia +snail)
 ;; module in init.el -- no manual (package!) decls needed.
 
-(package! snakemake-mode)
-
-;; Claude Code in Emacs: runs the Claude Code CLI in a vterm buffer with
-;; send-region/file/error from your buffers. Reuses your existing CC OAuth
-;; (no API key). transient + vterm already provided by Doom.
-(package! claude-code :recipe (:host github :repo "stevemolitor/claude-code.el"))
-(package! inheritenv :recipe (:host github :repo "purcell/inheritenv"))
-
-;; Nushell
-(package! nushell-mode :recipe (:host github :repo "mrkkrp/nushell-mode"))
-
+;; Removed as unused: snakemake-mode and nushell-mode (file-type modes for
+;; languages not written here), claude-code + its inheritenv dependency, and
+;; citar. `doom sync' builds everything declared here regardless of which
+;; config profile is active, so an unused declaration costs build time and
+;; disk on every machine. Recover any of them from git history if needed.
 
 
 ;; Exporting docs
@@ -88,7 +82,6 @@
 ;; Quatro Markdown
 ;;(package! quarto-mode)
 
-(package! citar)
 ;;(package! url)
 ;;(package! url-http)
 ;; (package! ewoc)
