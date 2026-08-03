@@ -106,6 +106,7 @@
        ;;taskrunner        ; taskrunner for all your projects
        ;;terraform         ; infrastructure as code
        ;;tmux              ; an API for interacting with tmux
+       tree-sitter       ; required by the +tree-sitter flag on :lang javascript
        ;;upload            ; map local to remote projects via ssh/ftp
 
        :os
@@ -138,7 +139,8 @@
        ;;idris             ;
        json              ; At least it ain't XML
        ;;(java +meghanada) ; the poster child for carpal tunnel syndrome
-       javascript        ; JS + TypeScript (.ts/.tsx) -- highlighting + light edit, no LSP
+       (javascript +tree-sitter) ; JS + TypeScript (.ts/.tsx) -- no LSP. +tree-sitter
+                                 ; is what gives working TSX/JSX on emacs 29+
        (julia +snail)    ; a better, faster MATLAB (julia-mode + julia-snail REPL)
        ;;kotlin            ; a better, slicker Java(Script)
        latex             ; writing papers in Emacs has never been so fun
@@ -161,7 +163,7 @@
        ;;rest              ; Emacs as a REST client
        ;;rst               ; ReST in peace
        ;;(ruby +rails)     ; 1.step {|i| p "Ruby is #{i.even? ? 'love' : 'life'}"}
-       ruby
+       ;;ruby              ; not used; was flagged by doom doctor as uninstalled
        ;;rust              ; Fe2O3.unwrap().unwrap().unwrap().unwrap()
        ;;scala             ; java, but good
        ;;scheme            ; a fully conniving family of lisps

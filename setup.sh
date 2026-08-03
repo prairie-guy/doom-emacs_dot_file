@@ -8,8 +8,13 @@
 #
 # Requires sudo for the apt step only. Everything else is per-user.
 #
-#   ./setup.sh                 # install
-#   ./setup.sh --check         # report what would change, touch nothing
+#   ./setup.sh                            # install, typical-config.el profile
+#   ./setup.sh --config base-config.el    # install with a specific profile
+#   ./setup.sh --check                    # report what would change, touch nothing
+#
+# Profiles (see config.el): base-config.el is the portable editor core,
+# typical-config.el adds python/julia/claude-code (the default), and
+# full-config.el adds the bibtex/citar stack.
 #
 # Overridable via environment:
 #   EMACS_PKG     apt package for emacs        (default: emacs-nox)
@@ -30,19 +35,38 @@ BASHRC="$HOME/.bashrc"
 SKIP_APT="${SKIP_APT:-0}"
 CHECK_ONLY=0
 
-# vterm needs all three of libvterm-dev, pkg-config and libtool-bin; see README.
 APT_PACKAGES=(
   git
-  ripgrep
-  fd-find
-  libvterm-dev
-  pkg-config
-  make
-  cmake
+  ripgrep            # :completion vertico, projectile
+  fd-find            # ditto; installs as `fdfind`, doom checks both names
+  aspell             # :checkers (spell +aspell)
+  aspell-en          # ...which is useless without a dictionary
+  pandoc             # :lang (org +pandoc) and markdown export/preview
+  build-essential    # gcc/g++/make: compiles vterm and tree-sitter grammars
+  libvterm-dev       # :term vterm -- all three of libvterm-dev, pkg-config
+  pkg-config         # and libtool-bin are required; see the vterm notes in
+  cmake              # the README for why each one matters
   libtool-bin
 )
 
-[[ "${1:-}" == "--check" ]] && CHECK_ONLY=1
+# Deliberately NOT installed here:
+#   nodejs/npm  -- comes from the parent setup-linux-server.sh full package set
+#   texlive     -- :lang latex works without it until you actually export
+#   julia       -- install via juliaup, not apt; apt's version lags badly
+#   claude CLI  -- curl -fsSL https://claude.ai/install.sh | bash
+
+CONFIG_PROFILE=""
+
+while (( $# )); do
+  case "$1" in
+    --check)  CHECK_ONLY=1; shift ;;
+    --config) [[ -n "${2:-}" ]] || { printf 'xx --config needs a filename\n' >&2; exit 1; }
+              CONFIG_PROFILE="$2"; shift 2 ;;
+    --config=*) CONFIG_PROFILE="${1#*=}"; shift ;;
+    -h|--help) sed -n '2,20p' "$0" | sed 's/^# \?//'; exit 0 ;;
+    *) printf 'xx unknown argument: %s (try --help)\n' "$1" >&2; exit 1 ;;
+  esac
+done
 
 log()  { printf '\033[1;34m==>\033[0m %s\n' "$*"; }
 skip() { printf '    \033[2m--  %s\033[0m\n' "$*"; }
@@ -148,6 +172,26 @@ else
     warn "to push later: git -C $DOOMDIR remote set-url origin $CONFIG_REPO"
     git clone "$CONFIG_REPO_HTTPS" "$DOOMDIR"
   fi
+fi
+
+# -------------------------------------------------------------- config profile --
+
+# config.el reads this marker to decide which *-config.el to load. Only written
+# when --config is passed; absent, config.el falls back to typical-config.
+if [[ -n "$CONFIG_PROFILE" ]]; then
+  if [[ ! -e "$DOOMDIR/$CONFIG_PROFILE" ]] && (( ! CHECK_ONLY )); then
+    die "no such profile: $DOOMDIR/$CONFIG_PROFILE"
+  fi
+  log "selecting config profile: $CONFIG_PROFILE"
+  if (( CHECK_ONLY )); then
+    printf '    \033[2m[would write]\033[0m %s -> %s\n' "$CONFIG_PROFILE" "$DOOMDIR/.doom-config"
+  else
+    printf '%s\n' "$CONFIG_PROFILE" >"$DOOMDIR/.doom-config"
+  fi
+elif [[ -f "$DOOMDIR/.doom-config" ]]; then
+  skip "config profile already set to $(<"$DOOMDIR/.doom-config")"
+else
+  skip "no --config given, config.el will use typical-config.el"
 fi
 
 # ------------------------------------------------------------------ doom core --

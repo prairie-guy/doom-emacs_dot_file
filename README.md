@@ -42,6 +42,13 @@ Preview what it would do without touching anything:
 ~/.config/doom/setup.sh --check
 ```
 
+Pick a configuration profile for the machine with `--config` (see
+[Configuration profiles](#configuration-profiles) below):
+
+```
+~/.config/doom/setup.sh --config base-config.el
+```
+
 Behavior can be overridden by environment variable:
 
 | variable | default | purpose |
@@ -149,8 +156,37 @@ old location no longer exists in doom v3.
 
 * `init.el` - General parameter selections. Select options. No additions.
 * `packages.el` - Add additional packages here. Don't use melpa or add package management.
-* `config.el` - This is where personal customization should take place.
+* `config.el` - Thin profile selector only; the real config is in the profiles below.
 * `setup.sh` - Automated installer, above.
+
+## Configuration profiles
+
+Not every machine wants the whole configuration. A headless build server does
+not need the julia REPL or a bibliography manager. So the config is split into
+three **strictly nested** profiles -- each loads the one below it, so no code is
+duplicated:
+
+| profile | contains | needs |
+|---|---|---|
+| `base-config.el` | keybindings, terminal scrolling, UI, undo, smartparens, org, markdown | nothing beyond `setup.sh` |
+| `typical-config.el` | base + corfu tweaks, python, julia, claude-code | python; julia and claude optional (both lazy) |
+| `full-config.el` | typical + bibtex/citar | the `~/uofc/Articles/` library |
+
+`typical-config.el` is the default. Select another with:
+
+```
+./setup.sh --config base-config.el
+```
+
+That writes the profile name to `.doom-config`, which `config.el` reads at
+startup. It is gitignored, so a machine's choice never shows up as a modified
+`config.el` in `git status`. If the marker is missing, empty, or names a file
+that isn't there, `config.el` falls back to `typical-config.el` rather than
+failing to load any configuration.
+
+To switch profiles by hand, just edit `.doom-config` (or delete it to get the
+default) and restart Emacs. No `doom sync` needed -- that is only for `init.el`
+and `packages.el`.
 
 ## doom binaries are in `~/.config/emacs/bin`
 
