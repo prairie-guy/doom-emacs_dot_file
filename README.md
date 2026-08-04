@@ -9,11 +9,11 @@ based on the configuration I had in: https://github.com/prairie-guy/emacs_dotfil
 ## Automated install
 
 `setup.sh` performs the whole install below in one step. It is written to be
-called as a module from a parent provisioning script (`setup-linux-server.sh`),
+called as a module from a parent provisioning script (`provision-ubuntu-server.sh`),
 or run on its own.
 
 ```
-git clone git@github.com:prairie-guy/doom-emacs_dot_file.git ~/.config/doom
+git clone https://github.com/prairie-guy/doom-emacs_dot_file.git ~/.config/doom
 ~/.config/doom/setup.sh
 ```
 
@@ -21,7 +21,7 @@ Or fully unattended from a parent script, which may clone this repo first or
 let `setup.sh` do it:
 
 ```
-# in setup-linux-server.sh
+# in provision-ubuntu-server.sh
 ~/.config/doom/setup.sh
 ```
 
@@ -97,12 +97,18 @@ ln -s /usr/local/opt/emacs-plus/Emacs.app /Applications/Emacs.app
 ### 2. System packages
 
 ```
-sudo apt install git ripgrep fd-find libvterm-dev pkg-config make cmake libtool-bin
+sudo apt install git ripgrep fd-find aspell aspell-en pandoc \
+                 build-essential libvterm-dev pkg-config cmake libtool-bin
 ```
 
 * `ripgrep` -- faster grep (https://github.com/BurntSushi/ripgrep)
 * `fd-find` -- faster find (https://github.com/sharkdp/fd). Debian/Ubuntu
   install this as `fdfind`, not `fd`; doom checks for both names.
+* `aspell` + `aspell-en` -- `:checkers (spell +aspell)`; the checker is inert
+  without a dictionary
+* `pandoc` -- `:lang (org +pandoc)` and markdown export/preview
+* `build-essential` -- gcc/g++/make, needed to compile both vterm and the
+  tree-sitter grammars
 * the rest are the vterm build chain; see the vterm notes below
 
 No `xclip` on a headless box. Clipboard goes through OSC-52 instead -- the
@@ -124,11 +130,23 @@ then `ec` to connect, `edaemon-restart` after editing config.
 Do this **before** installing doom, so doom finds a config on first sync.
 
 ```
-git clone git@github.com:prairie-guy/doom-emacs_dot_file.git ~/.config/doom
+git clone https://github.com/prairie-guy/doom-emacs_dot_file.git ~/.config/doom
 ```
 
-Use the ssh address, not https -- that lets `git push` authenticate through your
-ssh key.
+Clone over **https**. A freshly created account has no key registered with
+GitHub, so an ssh clone fails with `Permission denied (publickey)` before
+anything else can run. The repo is public, so https needs no credentials.
+
+To push from this machine later, add your key at
+<https://github.com/settings/keys> and then switch the remote:
+
+```
+git -C ~/.config/doom remote set-url origin git@github.com:prairie-guy/doom-emacs_dot_file.git
+```
+
+(`setup.sh` does this the other way round -- it tries ssh first so a machine
+that *is* set up gets a pushable remote, and falls back to https with a warning
+when the key is not registered yet.)
 
 ### 5. Install doom
 
