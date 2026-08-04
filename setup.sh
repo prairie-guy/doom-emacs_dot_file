@@ -35,6 +35,7 @@ EMACSDIR="${EMACSDIR:-$HOME/.config/emacs}"
 CONFIG_REPO="${CONFIG_REPO:-git@github.com:prairie-guy/doom-emacs_dot_file.git}"
 CONFIG_REPO_HTTPS="https://github.com/prairie-guy/doom-emacs_dot_file.git"
 DOOM_CORE_REPO="https://github.com/doomemacs/core"
+SCRIPT_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd -P)"
 BASHRC="$HOME/.bashrc"
 SKIP_APT="${SKIP_APT:-0}"
 CHECK_ONLY=0
@@ -80,6 +81,19 @@ log()  { printf '\033[1;34m==>\033[0m %s\n' "$*"; }
 skip() { printf '    \033[2m--  %s\033[0m\n' "$*"; }
 warn() { printf '\033[1;33m!!\033[0m %s\n' "$*" >&2; }
 die()  { printf '\033[1;31mxx\033[0m %s\n' "$*" >&2; exit 1; }
+
+# Never remove the directory this script lives in, an ancestor of it, $HOME, or
+# /. The clone-failure cleanup below is the only rm -rf here, but DOOMDIR is an
+# overridable env var, so bound it explicitly rather than trusting the caller.
+safe_rmdir() {
+  local target="$1" resolved
+  resolved="$(cd "$target" 2>/dev/null && pwd -P)" || return 0   # absent: nothing to do
+  [[ "$resolved" != "/" ]]        || die "refusing to remove /"
+  [[ "$resolved" != "$HOME" ]]    || die "refusing to remove \$HOME"
+  [[ "$SCRIPT_DIR" != "$resolved" && "$SCRIPT_DIR" != "$resolved"/* ]] \
+    || die "refusing to remove $resolved -- this script lives inside it"
+  rm -rf "$resolved"
+}
 
 # Under --check, describe the action instead of doing it.
 run() {
@@ -175,10 +189,11 @@ else
   # fresh box with no key registered, and say so.
   if (( CHECK_ONLY )); then
     printf '    \033[2m[would clone]\033[0m %s -> %s\n' "$CONFIG_REPO" "$DOOMDIR"
-  elif ! git clone "$CONFIG_REPO" "$DOOMDIR"; then
+  elif ! GIT_SSH_COMMAND="ssh -o StrictHostKeyChecking=accept-new" \
+         git clone "$CONFIG_REPO" "$DOOMDIR"; then
     # A failed clone can leave a partial directory, which would make the https
     # attempt fail with "destination path already exists".
-    rm -rf "$DOOMDIR"
+    safe_rmdir "$DOOMDIR"
     warn "ssh clone failed, falling back to https (read-only)."
     warn "to push later: git -C $DOOMDIR remote set-url origin $CONFIG_REPO"
     git clone "$CONFIG_REPO_HTTPS" "$DOOMDIR"
