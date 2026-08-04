@@ -129,7 +129,7 @@ else
 
   missing=()
   for pkg in "${APT_PACKAGES[@]}"; do
-    dpkg-query -W -f='${Status}' "$pkg" 2>/dev/null | grep -q "^install ok installed$" \
+    [[ "$(dpkg-query -W -f='${Status}' "$pkg" 2>/dev/null)" == "install ok installed" ]] \
       || missing+=("$pkg")
   done
 
@@ -175,7 +175,10 @@ else
   # fresh box with no key registered, and say so.
   if (( CHECK_ONLY )); then
     printf '    \033[2m[would clone]\033[0m %s -> %s\n' "$CONFIG_REPO" "$DOOMDIR"
-  elif ! git clone "$CONFIG_REPO" "$DOOMDIR" 2>/dev/null; then
+  elif ! git clone "$CONFIG_REPO" "$DOOMDIR"; then
+    # A failed clone can leave a partial directory, which would make the https
+    # attempt fail with "destination path already exists".
+    rm -rf "$DOOMDIR"
     warn "ssh clone failed, falling back to https (read-only)."
     warn "to push later: git -C $DOOMDIR remote set-url origin $CONFIG_REPO"
     git clone "$CONFIG_REPO_HTTPS" "$DOOMDIR"
@@ -193,10 +196,24 @@ install_as() {
     skip "using $dst as-is"
     return
   fi
-  [[ -e "$DOOMDIR/$src" ]] || die "no such file: $DOOMDIR/$src"
+  if [[ ! -e "$DOOMDIR/$src" ]]; then
+    # Under --check the repo may not be cloned yet, so a missing source is
+    # expected rather than fatal.
+    (( CHECK_ONLY )) && { skip "$src not present yet (clone happens above)"; return; }
+    die "no such file: $DOOMDIR/$src"
+  fi
+
+  # Already installed: nothing to do. Without this the second run of
+  # `setup.sh --config base-config.el` sees the dirty $dst it created itself
+  # and refuses, so the documented workflow would not be re-runnable.
+  if [[ -e "$DOOMDIR/$dst" ]] && cmp -s "$DOOMDIR/$src" "$DOOMDIR/$dst"; then
+    skip "$dst already matches $src"
+    return
+  fi
 
   # $dst is tracked, so overwriting it makes the repo dirty. Refuse to discard
-  # edits the user has not committed.
+  # edits the user has not committed -- unless those edits are exactly a
+  # previously-installed profile, handled above.
   if git -C "$DOOMDIR" rev-parse --git-dir >/dev/null 2>&1 \
      && ! git -C "$DOOMDIR" diff --quiet -- "$dst" 2>/dev/null; then
     die "$dst has uncommitted changes; commit or stash them before replacing it"

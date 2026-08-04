@@ -66,6 +66,12 @@
 (package! nerd-icons-corfu)   ; symbol-kind icons in the completion popup
 (package! rainbow-delimiters) ; color-code nested parens/brackets by depth
 
+;; C-x o is bound to ace-window in base-config.el. The :ui window-select module
+;; that would normally supply it is disabled, so without this declaration it is
+;; only present as a transitive dependency of treemacs -- and disabling treemacs
+;; would turn C-x o into a void-function error.
+(package! ace-window)
+
 ;; julia-mode + julia-repl + julia-snail now come from Doom's (julia +snail)
 ;; module in init.el -- no manual (package!) decls needed.
 
