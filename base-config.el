@@ -75,18 +75,14 @@
 ;; KEY: doom-one gives these match faces a BACKGROUND (e.g. blue #51afef) that
 ;; masks the letters. Clear the background (:background unspecified) so matched
 ;; text is just bold + a readable color on the normal bg -- the "transparent" look.
-;; These are terminal colour names ("color-236", "brightyellow") and are only
-;; valid on a tty; in a GUI frame they are not recognised and the faces fall
-;; back to defaults. The config is shared with a Mac, so scope them to terminal
-;; frames via the `tty' display type rather than applying them unconditionally.
 (custom-set-faces!
-  '(hl-line ((((type tty)) :background "color-236")))   ; dark grey, distinct from black
-  '(completions-common-part      ((((type tty)) :foreground "brightyellow"  :background unspecified :weight bold)))
-  '(completions-first-difference ((((type tty)) :foreground "brightred"     :background unspecified :weight bold)))
-  '(orderless-match-face-0 ((((type tty)) :foreground "brightyellow"  :background unspecified :weight bold)))
-  '(orderless-match-face-1 ((((type tty)) :foreground "brightcyan"    :background unspecified :weight bold)))
-  '(orderless-match-face-2 ((((type tty)) :foreground "brightgreen"   :background unspecified :weight bold)))
-  '(orderless-match-face-3 ((((type tty)) :foreground "brightmagenta" :background unspecified :weight bold))))
+  '(hl-line :background "color-236")     ; dark grey, distinct from black
+  '(completions-common-part   :foreground "brightyellow"  :background unspecified :weight bold)
+  '(completions-first-difference :foreground "brightred"  :background unspecified :weight bold)
+  '(orderless-match-face-0  :foreground "brightyellow"  :background unspecified :weight bold)
+  '(orderless-match-face-1  :foreground "brightcyan"    :background unspecified :weight bold)
+  '(orderless-match-face-2  :foreground "brightgreen"   :background unspecified :weight bold)
+  '(orderless-match-face-3  :foreground "brightmagenta" :background unspecified :weight bold))
 
 ;; Rainbow-colored nested delimiters in code buffers.
 (add-hook 'prog-mode-hook #'rainbow-delimiters-mode)
